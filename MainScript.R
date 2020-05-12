@@ -9,10 +9,6 @@ rm(list=ls())
 # Close plots
 graphics.off()
 
-
-# Set working directory - ONLY WORKS ON MY LOCAL MACHINE
-setwd("~/PHD/GPPCorrelationModelCheck")
-
 # Source the custom functions
 source("DataExtraction.R")
 source("TimeSeries.R")
@@ -45,7 +41,7 @@ Sites = c("Brandbjerg",
 
 # Decide the number of years of rainfall to consider when talking about antecedent
 # rainfall/temperature
-Nlag = 3
+Nlag = 2
 
 #*******************************************************************************
 # Data Extraction - This can be skipped if .Rdata files already exist
