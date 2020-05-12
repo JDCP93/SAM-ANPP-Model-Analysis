@@ -3,33 +3,28 @@ Project Summary
 Jon Page
 12/05/2020
 
-## R Markdown
+## SAM ANPP Model Analysis
 
-This is an R Markdown document. Markdown is a simple formatting syntax
-for authoring HTML, PDF, and MS Word documents. For more details on
-using R Markdown see <http://rmarkdown.rstudio.com>.
+This is a R Markdown file to collect my curated thoughts and outputs
+resulting from this project. I am attempting to explore the ability of
+various terrestial biosphere models (TBMs) to predict ecosystem
+productivity and the role that antecedent conditions of climatic drivers
+play in productivity responses.
 
-When you click the **Knit** button a document will be generated that
-includes both content as well as the output of any embedded R code
-chunks within the document. You can embed an R code chunk like this:
+More incoherent ramblings are saved in a LaTeX document on Overlead -
+this file is a summary of my progress.
 
-``` r
-summary(cars)
-```
+### P-ANPP SAM Modelling of Sites
 
-    ##      speed           dist       
-    ##  Min.   : 4.0   Min.   :  2.00  
-    ##  1st Qu.:12.0   1st Qu.: 26.00  
-    ##  Median :15.0   Median : 36.00  
-    ##  Mean   :15.4   Mean   : 42.98  
-    ##  3rd Qu.:19.0   3rd Qu.: 56.00  
-    ##  Max.   :25.0   Max.   :120.00
+The first step was to model the 10 sites from Paschalis et al (2020)
+using the SAM approach with precipitation (P) as the only driver. The
+key result from this is that only two sites indicate a significant
+response of ANPP to antecedent P, as per the below figure
 
-## Including Plots
+![](AlphaPlot.png)
 
-You can also embed plots, for example:
+The monthly weights for these two sites offer no immediate information
+about which lags are most important - although Konza has more noticeable
+spikes than Lahav.
 
-![](ProjectSummary_files/figure-gfm/pressure-1.png)<!-- -->
-
-Note that the `echo = FALSE` parameter was added to the code chunk to
-prevent printing of the R code that generated the plot.
+![](SignificantWeights.png)
