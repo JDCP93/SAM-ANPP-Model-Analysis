@@ -27,3 +27,11 @@ The monthly weights for these two sites offer no immediate information about whi
 
 ![](SignificantWeights.png)
 
+I have run the SAM script for 1, 2, 4 and 5 year lags as well. An interesting result is that antecedent rainfall at Lahav is NOT SIGNIFICANT at these lag lengths - this to me implies an issue. If a 3 year lag is significant, the method should result in a 5 year lag ALSO being significant - if years 4 and 5 have no impact then their weights should just be small relative to the significant years.
+
+| | |
+|:-:|:-:|
+|1 Year|2 Year|
+|<img src="1YearAlphas.png" width="300" height="200">|<img src="2YearAlphas.png" width="300" height="200">|
+|4 Year|5 Year|
+|<img src="4YearAlphas.png" width="300" height="200">|<img src="5YearAlphas.png" width="300" height="200">|
