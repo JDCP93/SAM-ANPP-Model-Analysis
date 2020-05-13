@@ -41,7 +41,7 @@ Sites = c("Brandbjerg",
 
 # Decide the number of years of rainfall to consider when talking about antecedent
 # rainfall/temperature
-Nlag = 2
+Nlag = 1
 
 #*******************************************************************************
 # Data Extraction - This can be skipped if .Rdata files already exist
