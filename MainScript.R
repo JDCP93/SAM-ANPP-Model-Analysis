@@ -121,7 +121,7 @@ for (i in OrderedSites$ByMAT){
 }
 
 # Plot all sites in one figure
-grid.arrange(grobs=SitePlot,top="P vs ANPP per Site")
+grid.arrange(grobs=SitePlot,top="P vs ANPP per Site, ordered by MAT")
 
 #*******************************************************************************
 # Now plot ANPP vs previous year precipitation
@@ -162,7 +162,7 @@ for (i in OrderedSites$ByMAT){
 }
 
 # Plot all sites in one figure
-grid.arrange(grobs=SitePlot,top="Prior Year P vs ANPP per Site")
+grid.arrange(grobs=SitePlot,top="Prior Year P vs ANPP per Site, order by MAT")
 
 
 #*******************************************************************************
@@ -204,11 +204,11 @@ for (i in OrderedSites$ByMAT){
 }
 
 # Plot all sites in one figure
-grid.arrange(grobs=SitePlot,top="T vs ANPP per Site")
+grid.arrange(grobs=SitePlot,top="T vs ANPP per Site, ordered by MAT")
 
 
 #*******************************************************************************
-# Perform SAM-P modelling
+# Perform SAM_P modelling
 #*******************************************************************************
 
 # We should be able to use the SAM function and model that was used for the
@@ -283,9 +283,9 @@ for (Site in Sites){
   # Extract the data needed
   k = k + 1
   alphas$Site[k] = Site
-  alphas$Mean[k] = eval(parse(text=name))$alphas$mean[2]#/eval(parse(text=name))$alphas$mean[2]
-  alphas$Min[k] = eval(parse(text=name))$alphas$min[2]#/eval(parse(text=name))$alphas$mean[2]
-  alphas$Max[k] = eval(parse(text=name))$alphas$max[2]#/eval(parse(text=name))$alphas$mean[2]
+  alphas$Mean[k] = eval(parse(text=name))$alphas$mean[2]
+  alphas$Min[k] = eval(parse(text=name))$alphas$min[2]
+  alphas$Max[k] = eval(parse(text=name))$alphas$max[2]
   # Check whether significantly different from zero (i.e. min and max have same sign)
   alphas$Significant[k] = 1*(sign(alphas$Min[k])==sign(alphas$Max[k]))
 }
@@ -296,7 +296,9 @@ alphaPlot = ggplot(data = alphas) +
   geom_pointrange(aes(x=Site,y=Mean,ymin=Min,ymax=Max,color=as.factor(Significant))) +
   scale_color_manual(values=c("black","red"),limits=c("0","1")) +
   theme(legend.position="") + 
-  labs(title = "Covariate of antecedent P term from SAM modelling for each site",
+  labs(title = paste0("Covariate of antecedent P term from SAM modelling for each site - ",
+                      Nlag-1,
+                      " year lag"),
        y = "Mean Covariate Value") +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -307,7 +309,7 @@ grid.arrange(alphaPlot)
 
 
 #*******************************************************************************
-# Plot the SAM model results
+# Plot the SAM_P model results
 #*******************************************************************************
 
 # Initialise index and lists of plots
@@ -330,9 +332,15 @@ for (i in OrderedSites$ByMAT){
 }
 
 # Display the plots together
-grid.arrange(grobs=weightsPlots, top = "Weights for SAM Model per Site")
+grid.arrange(grobs=weightsPlots,
+             top = paste0("Weights for SAM_P Model per Site, ordered by MAT - ",
+                          Nlag-1,
+                          " year lag"))
 
-grid.arrange(grobs=ANPPPlots, top = "Modelled ANPP vs 'Observed' ANPP per Site")
+grid.arrange(grobs=ANPPPlots, 
+             top = paste0("SAM_P Modelled vs 'Observed' ANPP per Site, ordered by MAT - ",
+                          Nlag-1,
+                          " year lag"))
 
 
  
