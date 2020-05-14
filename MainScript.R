@@ -322,7 +322,7 @@ weightsPlots = list()
 for (i in OrderedSites$ByMAT){
   k = k + 1
   outputName = paste0(i,"_Plots")
-  output = SAMPlot(i,Nlag)
+  output = SAMPlot_P(i,Nlag)
   assign(outputName,output)
   if (i %in% alphas$Site[alphas$Significant==1]){
     j = j + 1
