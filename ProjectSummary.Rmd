@@ -41,6 +41,8 @@ I have run the SAM script for 1, 2, 4 and 5 year lags as well. An interesting re
 
 I have added temperature to the model - it is in exactly the same form as the antecedent precipitation. This is currently using mean monthly temperature which I believe will "smooth" the input too much and make it difficult to distinguish any dependence. 
 
+In the below plots, diamonds (on the left) are the P covariate and circles (on the right) are the T covariate. Red indicates that they are significantly different from 0. The covariates have been normalised by dividing by the mean but the extensive CIs at individual sites mean that the error bars at some sites are still not visible. I am not happy with these plots - they could be much more readable.
+
 | |
 |:-:|
 |1 Year|
@@ -53,3 +55,7 @@ I have added temperature to the model - it is in exactly the same form as the an
 |<img src="Plots/PT_4_Alphas.png" width="600" height="400">|
 |5 Year|
 |<img src="Plots/PT_5_Alphas.png" width="600" height="400">|
+
+I see the below issues:
+- Similarly to the P model, site covariates lose significance when longer lags are explored. This is not ideal behaviour in the model.
+- Sites report differing significance of the P covariate between the P and PT models. What does this mean in terms of the site's dependence on antecedent P?

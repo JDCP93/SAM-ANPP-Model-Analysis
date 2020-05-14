@@ -48,6 +48,13 @@ as the antecedent precipitation. This is currently using mean monthly
 temperature which I believe will “smooth” the input too much and make it
 difficult to distinguish any dependence.
 
+In the below plots, diamonds (on the left) are the P covariate and
+circles (on the right) are the T covariate. Red indicates that they are
+significantly different from 0. The covariates have been normalised by
+dividing by the mean but the extensive CIs at individual sites mean that
+the error bars at some sites are still not visible. I am not happy with
+these plots - they could be much more readable.
+
 |                                                            |
 | :--------------------------------------------------------: |
 |                           1 Year                           |
