@@ -48,11 +48,15 @@ as the antecedent precipitation. This is currently using mean monthly
 temperature which I believe will “smooth” the input too much and make it
 difficult to distinguish any dependence.
 
-|                                                            |                                                            |
-| :--------------------------------------------------------: | :--------------------------------------------------------: |
-|                           1 Year                           |                           2 Year                           |
-| <img src="Plots/PT_1_Alphas.png" width="300" height="200"> | <img src="Plots/PT_2_Alphas.png" width="300" height="200"> |
-|                           3 Year                           |                           4 Year                           |
-| <img src="Plots/PT_3_Alphas.png" width="300" height="200"> | <img src="Plots/PT_4_Alphas.png" width="300" height="200"> |
-|                           5 Year                           |                                                            |
-| <img src="Plots/PT_5_Alphas.png" width="300" height="200"> |                                                            |
+|                                                            |
+| :--------------------------------------------------------: |
+|                           1 Year                           |
+| <img src="Plots/PT_1_Alphas.png" width="600" height="400"> |
+|                           2 Year                           |
+| <img src="Plots/PT_2_Alphas.png" width="600" height="400"> |
+|                           3 Year                           |
+| <img src="Plots/PT_3_Alphas.png" width="600" height="400"> |
+|                           4 Year                           |
+| <img src="Plots/PT_4_Alphas.png" width="600" height="400"> |
+|                           5 Year                           |
+| <img src="Plots/PT_5_Alphas.png" width="600" height="400"> |
