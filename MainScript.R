@@ -13,7 +13,7 @@ graphics.off()
 source("DataExtraction.R")
 source("TimeSeries.R")
 source("OrderSites.R")
-source("SAMFunction.R")
+source("SAMFunction_P.R")
 source("SAMPlot.R")
 
 # Source required packages
@@ -220,7 +220,7 @@ grid.arrange(grobs=SitePlot,top="T vs ANPP per Site")
 block = timeblocks(1,(Nlag>1)*1,(Nlag>2)*(Nlag-2),0,0)$block
 
 for (i in Sites){
-  if (file.exists(paste0(i,"_posterior_",Nlag,"_",max(block),".Rdata"))){
+  if (file.exists(paste0(i,"_P_posterior_",Nlag,"_",max(block),".Rdata"))){
     print(paste0("SAM output already exists for ",i," with lag ",Nlag," and ",max(block)," blocks"))
   } else {
     #Since all monthly data are full years, we can just straight up form matrices
@@ -259,7 +259,7 @@ for (i in Sites){
     ANPP = ANPP[!is.na(Data$ANPP),]
   
     # We can now call the SAM function
-    SAM(i,ANPP,PPT,Nlag,block,prior=FALSE)
+    SAM_P(i,ANPP,PPT,Nlag,block,prior=FALSE)
   }
 }
 

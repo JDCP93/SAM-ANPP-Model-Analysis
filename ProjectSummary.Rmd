@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This is a R Markdown file to collect my curated thoughts and outputs resulting from this project. I am attempting to explore the ability of various terrestial biosphere models (TBMs) to predict ecosystem productivity and the role that antecedent conditions of climatic drivers play in productivity responses.
 
-More incoherent ramblings are saved in a LaTeX document on Overlead - this file is a summary of my progress.
+More incoherent ramblings are saved in a LaTeX document on Overleaf - this file is a summary of my progress.
 
 ### P-ANPP SAM Modelling of Sites
 

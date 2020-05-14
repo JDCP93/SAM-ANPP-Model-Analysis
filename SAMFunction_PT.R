@@ -1,4 +1,4 @@
-SAM <- function(Site,ANPP,Precip,Nlag,block,prior=FALSE){
+SAM_PT <- function(Site,ANPP,Precip,Nlag,block,prior=FALSE){
    
    # Function that runs a SAM model as per Ogle et al 2015 and outputs modelled
    # ANPP as well as a variety of performance metrics
@@ -40,6 +40,8 @@ SAM <- function(Site,ANPP,Precip,Nlag,block,prior=FALSE){
                ,'Nblocks' = max(block)
                # Monthly precip data
                ,'ppt' = (Precip[,2:13])
+               # Monthly temperature data
+               ,'Tair' = Tair[,2:13]
                # Year ID for ANPP
                ,'YearID' = 1:nrow(ANPP)
                # Yearly ANPP data - comment this out to obtain the priors
@@ -66,10 +68,10 @@ SAM <- function(Site,ANPP,Precip,Nlag,block,prior=FALSE){
    thin = 10 
    
    # Decide the variables to track
-   parameters = c('mu','a','weightOrdered','cum.weight','sumD1') 
+   parameters = c('mu','a','weightOrdered_T','cum.weight_T','sumD1_T','weightOrdered_P','cum.weight_P','sumD1_P') 
    
    # Put the model system into a variable
-   jags = jags.model('Model.R', data=Data, n.chains=nchains, n.adapt=nadapt) 
+   jags = jags.model('Model_PT.R', data=Data, n.chains=nchains, n.adapt=nadapt) 
    
    # Generate the MCMC chain (this is basically running the Bayesian analysis)
    fit = coda.samples(jags, n.iter=samples, n.burnin=burn, thin=thin,
@@ -91,19 +93,28 @@ SAM <- function(Site,ANPP,Precip,Nlag,block,prior=FALSE){
    }
    
    # Normalise the yearly weights
-   sumD1Stats$sd = sumD1Stats$sd/sum(sumD1Stats$mean,na.rm=TRUE)
-   sumD1Stats$min = sumD1Stats$min/sum(sumD1Stats$mean,na.rm=TRUE)
-   sumD1Stats$max = sumD1Stats$max/sum(sumD1Stats$mean,na.rm=TRUE)
-   sumD1Stats$mean = sumD1Stats$mean/sum(sumD1Stats$mean,na.rm=TRUE)
+   # Normalise the yearly weights
+   sumD1_PStats$sd = sumD1_PStats$sd/sum(sumD1_PStats$mean,na.rm=TRUE)
+   sumD1_PStats$min = sumD1_PStats$min/sum(sumD1_PStats$mean,na.rm=TRUE)
+   sumD1_PStats$max = sumD1_PStats$max/sum(sumD1_PStats$mean,na.rm=TRUE)
+   sumD1_PStats$mean = sumD1_PStats$mean/sum(sumD1_PStats$mean,na.rm=TRUE)
+   
+   sumD1_TStats$sd = sumD1_TStats$sd/sum(sumD1_TStats$mean,na.rm=TRUE)
+   sumD1_TStats$min = sumD1_TStats$min/sum(sumD1_TStats$mean,na.rm=TRUE)
+   sumD1_TStats$max = sumD1_TStats$max/sum(sumD1_TStats$mean,na.rm=TRUE)
+   sumD1_TStats$mean = sumD1_TStats$mean/sum(sumD1_TStats$mean,na.rm=TRUE)
    
    # if priors are being calculated, the performance metrics are irrelevant
    if (prior==TRUE){ 
       output = list("ANPPmod"=muStats,
-                          "alphas"=aStats,
-                          "cumulativeWeights"=cum.weightStats,
-                          "yearlyWeights"=sumD1Stats,
-                          "monthlyWeights"=weightOrderedStats)
-      name = paste0(Site,"_prior_",Nlag,"_",Data$Nblocks)  
+                    "alphas"=aStats,
+                    "cumulativeWeights_P"=cum.weight_PStats,
+                    "yearlyWeights_P"=sumD1_PStats,
+                    "monthlyWeights_P"=weightOrdered_PStats,
+                    "cumulativeWeights_T"=cum.weight_TStats,
+                    "yearlyWeights_T"=sumD1_TStats,
+                    "monthlyWeights_T"=weightOrdered_TStats)
+      name = paste0(Site,"_PT_prior_",Nlag,"_",Data$Nblocks)  
       assign(name,output)
       save(list=c(name),file=paste0(name,".Rdata"))
    }else{
@@ -132,19 +143,22 @@ SAM <- function(Site,ANPP,Precip,Nlag,block,prior=FALSE){
       DIC = dbar+pd
    
       output = list("ANPPmod"=muStats,
-                          "alphas"=aStats,
-                          "cumulativeWeights"=cum.weightStats,
-                          "yearlyWeights"=sumD1Stats,
-                          "monthlyWeights"=weightOrderedStats,
-                          "DIC"=DIC,
-                          "R2"=R2,
-                          "MAE"=MAE,
-                          "Q5"=Q5,
-                          "Q95"=Q95,
-                          "NMSE"=NMSE)
+                    "alphas"=aStats,
+                    "cumulativeWeights_P"=cum.weight_PStats,
+                    "yearlyWeights_P"=sumD1_PStats,
+                    "monthlyWeights_P"=weightOrdered_PStats,
+                    "cumulativeWeights_T"=cum.weight_TStats,
+                    "yearlyWeights_T"=sumD1_TStats,
+                    "monthlyWeights_T"=weightOrdered_TStats,
+                    "DIC"=DIC,
+                    "R2"=R2,
+                    "MAE"=MAE,
+                    "Q5"=Q5,
+                    "Q95"=Q95,
+                    "NMSE"=NMSE)
    
       # Write output file
-      name = paste0(Site,"_posterior_",Nlag,"_",Data$Nblocks)
+      name = paste0(Site,"_PT_posterior_",Nlag,"_",Data$Nblocks)
       assign(name,output)
       save(list=c(name),file=paste0(name,".Rdata"))
    
