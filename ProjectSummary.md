@@ -21,13 +21,13 @@ using the SAM approach with precipitation (P) as the only driver. The
 key result from this is that only two sites indicate a significant
 response of ANPP to antecedent P, as per the below figure
 
-![](Plots/AlphaPlot.png)
+![](Plots/P_3_Alphas.png)
 
 The monthly weights for these two sites offer no immediate information
 about which lags are most important - although Konza has more noticeable
 spikes than Lahav.
 
-![](Plots/SignificantWeights.png)
+![](Plots/P_3_SigWeights.png)
 
 I have run the SAM script for 1, 2, 4 and 5 year lags as well. An
 interesting result is that antecedent rainfall at Lahav is NOT
@@ -36,9 +36,23 @@ year lag is significant, the method should result in a 5 year lag ALSO
 being significant - if years 4 and 5 have no impact then their weights
 should just be small relative to the significant years.
 
+|                                                           |                                                           |
+| :-------------------------------------------------------: | :-------------------------------------------------------: |
+|                          1 Year                           |                          2 Year                           |
+| <img src="Plots/P_1_Alphas.png" width="300" height="200"> | <img src="Plots/P_2_Alphas.png" width="300" height="200"> |
+|                          4 Year                           |                          5 Year                           |
+| <img src="Plots/P_4_Alphas.png" width="300" height="200"> | <img src="Plots/P_5_Alphas.png" width="300" height="200"> |
+
+I have added temperature to the model - it is in exactly the same form
+as the antecedent precipitation. This is currently using mean monthly
+temperature which I believe will “smooth” the input too much and make it
+difficult to distinguish any dependence.
+
 |                                                            |                                                            |
 | :--------------------------------------------------------: | :--------------------------------------------------------: |
 |                           1 Year                           |                           2 Year                           |
-| <img src="Plots/1YearAlphas.png" width="300" height="200"> | <img src="Plots/2YearAlphas.png" width="300" height="200"> |
-|                           4 Year                           |                           5 Year                           |
-| <img src="Plots/4YearAlphas.png" width="300" height="200"> | <img src="Plots/5YearAlphas.png" width="300" height="200"> |
+| <img src="Plots/PT_1_Alphas.png" width="300" height="200"> | <img src="Plots/PT_2_Alphas.png" width="300" height="200"> |
+|                           3 Year                           |                           4 Year                           |
+| <img src="Plots/PT_3_Alphas.png" width="300" height="200"> | <img src="Plots/PT_4_Alphas.png" width="300" height="200"> |
+|                           5 Year                           |                                                            |
+| <img src="Plots/PT_5_Alphas.png" width="300" height="200"> |                                                            |

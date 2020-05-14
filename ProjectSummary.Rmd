@@ -32,6 +32,20 @@ I have run the SAM script for 1, 2, 4 and 5 year lags as well. An interesting re
 | | |
 |:-:|:-:|
 |1 Year|2 Year|
-|<img src="Plots/P_1_Alphas.png" width="300" height="200">|<img src="Plots/2YearAlphas.png" width="300" height="200">|
+|<img src="Plots/P_1_Alphas.png" width="300" height="200">|<img src="Plots/P_2_Alphas.png" width="300" height="200">|
 |4 Year|5 Year|
-|<img src="Plots/4YearAlphas.png" width="300" height="200">|<img src="Plots/5YearAlphas.png" width="300" height="200">|
+|<img src="Plots/P_4_Alphas.png" width="300" height="200">|<img src="Plots/P_5_Alphas.png" width="300" height="200">|
+
+
+
+
+I have added temperature to the model - it is in exactly the same form as the antecedent precipitation. This is currently using mean monthly temperature which I believe will "smooth" the input too much and make it difficult to distinguish any dependence. 
+
+| | |
+|:-:|:-:|
+|1 Year|2 Year|
+|<img src="Plots/PT_1_Alphas.png" width="300" height="200">|<img src="Plots/PT_2_Alphas.png" width="300" height="200">|
+|3 Year|4 Year|
+|<img src="Plots/PT_3_Alphas.png" width="300" height="200">|<img src="Plots/PT_4_Alphas.png" width="300" height="200">|
+|5 Year||
+|<img src="Plots/PT_5_Alphas.png" width="300" height="200">||
