@@ -11,7 +11,7 @@ various terrestial biosphere models (TBMs) to predict ecosystem
 productivity and the role that antecedent conditions of climatic drivers
 play in productivity responses.
 
-More incoherent ramblings are saved in a LaTeX document on Overlead -
+More incoherent ramblings are saved in a LaTeX document on Overleaf -
 this file is a summary of my progress.
 
 ### P-ANPP SAM Modelling of Sites
@@ -21,13 +21,13 @@ using the SAM approach with precipitation (P) as the only driver. The
 key result from this is that only two sites indicate a significant
 response of ANPP to antecedent P, as per the below figure
 
-![](AlphaPlot.png)
+![](Plots/AlphaPlot.png)
 
 The monthly weights for these two sites offer no immediate information
 about which lags are most important - although Konza has more noticeable
 spikes than Lahav.
 
-![](SignificantWeights.png)
+![](Plots/SignificantWeights.png)
 
 I have run the SAM script for 1, 2, 4 and 5 year lags as well. An
 interesting result is that antecedent rainfall at Lahav is NOT
@@ -36,9 +36,9 @@ year lag is significant, the method should result in a 5 year lag ALSO
 being significant - if years 4 and 5 have no impact then their weights
 should just be small relative to the significant years.
 
-|                                                      |                                                      |
-| :--------------------------------------------------: | :--------------------------------------------------: |
-|                        1 Year                        |                        2 Year                        |
-| <img src="1YearAlphas.png" width="300" height="200"> | <img src="2YearAlphas.png" width="300" height="200"> |
-|                        4 Year                        |                        5 Year                        |
-| <img src="4YearAlphas.png" width="300" height="200"> | <img src="5YearAlphas.png" width="300" height="200"> |
+|                                                            |                                                            |
+| :--------------------------------------------------------: | :--------------------------------------------------------: |
+|                           1 Year                           |                           2 Year                           |
+| <img src="Plots/1YearAlphas.png" width="300" height="200"> | <img src="Plots/2YearAlphas.png" width="300" height="200"> |
+|                           4 Year                           |                           5 Year                           |
+| <img src="Plots/4YearAlphas.png" width="300" height="200"> | <img src="Plots/5YearAlphas.png" width="300" height="200"> |
