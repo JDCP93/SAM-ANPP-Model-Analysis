@@ -42,7 +42,7 @@ Sites = c("Brandbjerg",
 
 # Decide the number of years of rainfall to consider when talking about antecedent
 # rainfall/temperature
-Nlag = 2
+Nlag = 5
 
 #*******************************************************************************
 # Data Extraction - This can be skipped if .Rdata files already exist
@@ -279,7 +279,7 @@ alphas = data.frame("Site" = rep(0,length(Sites)),
 # This is done outside of SAMPlot as all sites will be on one set of axes
 for (Site in Sites){
   # Load the SAM model output for the site
-  name = paste0(Site,"_posterior_",Nlag,"_",12+((Nlag>1)*6)+((Nlag>2)*(Nlag-2)*4))
+  name = paste0(Site,"_P_posterior_",Nlag,"_",12+((Nlag>1)*6)+((Nlag>2)*(Nlag-2)*4))
   load(paste0(name,".Rdata"))
   # Extract the data needed
   k = k + 1
