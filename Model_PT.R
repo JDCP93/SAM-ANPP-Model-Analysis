@@ -145,7 +145,7 @@ model{
   
   # Define model for latent (mean) ANPP;
 
-  for (i in 1:N) {
+  for (i in Nlag:N) {
     # Calculate mu, the mean of the distribution of ANPP
     mu[i] <- a[1] + a[2] * antX_P[YearID[i]] + a[3] * antX_T[YearID[i]]
     # Likelihood for observed ANPP - it is a normal distribution with
