@@ -42,7 +42,7 @@ Sites = c("Brandbjerg",
 
 # Decide the number of years of rainfall to consider when talking about antecedent
 # rainfall/temperature
-Nlag = 1
+Nlag = 2
 
 #*******************************************************************************
 # Data Extraction - This can be skipped if .Rdata files already exist
@@ -413,3 +413,61 @@ for (i in Sites){
     SAM_PT(i,ANPP,PPT,Tair,Nlag,block,prior=FALSE)
   }
 }
+
+
+#*******************************************************************************
+# Plot of alphas to assess significance
+#*******************************************************************************
+
+# Initialise dataframe
+k = 0
+alphas = data.frame("Site" = rep(0,2*length(Sites)),
+                    "Mean" = rep(0,2*length(Sites)),
+                    "Min" = rep(0,2*length(Sites)),
+                    "Max" = rep(0,2*length(Sites)),
+                    "Significant" = rep(0,2*length(Sites)),
+                    "Variable" = rep(0,2*length(Sites)))
+
+
+# This is done outside of SAMPlot as all sites will be on one set of axes
+for (Site in Sites){
+  # Load the SAM model output for the site
+  name = paste0(Site,"_PT_posterior_",Nlag,"_",12+((Nlag>1)*6)+((Nlag>2)*(Nlag-2)*4))
+  load(paste0(name,".Rdata"))
+  # Extract the data needed
+  k = k + 1
+  alphas$Site[k] = Site
+  alphas$Mean[k] = eval(parse(text=name))$alphas$mean[2]/eval(parse(text=name))$alphas$mean[2]
+  alphas$Min[k] = eval(parse(text=name))$alphas$min[2]/eval(parse(text=name))$alphas$mean[2]
+  alphas$Max[k] = eval(parse(text=name))$alphas$max[2]/eval(parse(text=name))$alphas$mean[2]
+  # Check whether significantly different from zero (i.e. min and max have same sign)
+  alphas$Significant[k] = 1*(sign(alphas$Min[k])==sign(alphas$Max[k]))
+  alphas$Variable[k] = "PPT"
+  k = k + 1
+  alphas$Site[k] = Site
+  alphas$Mean[k] = eval(parse(text=name))$alphas$mean[3]/eval(parse(text=name))$alphas$mean[3]
+  alphas$Min[k] = eval(parse(text=name))$alphas$min[3]/eval(parse(text=name))$alphas$mean[3]
+  alphas$Max[k] = eval(parse(text=name))$alphas$max[3]/eval(parse(text=name))$alphas$mean[3]
+  # Check whether significantly different from zero (i.e. min and max have same sign)
+  alphas$Significant[k] = 1*(sign(alphas$Min[k])==sign(alphas$Max[k]))
+  alphas$Variable[k] = "Tair"
+
+}
+
+# Plot
+alphaPlot = ggplot(data = alphas) +
+  geom_hline(yintercept=0, linetype = "dashed",color="grey") +
+  geom_pointrange(aes(x=Site,y=Mean,ymin=Min,ymax=Max,shape=Variable,color=as.factor(Significant)),position = position_dodge(width = 0.5)) +
+  scale_color_manual(values=c("black","red"),limits=c("0","1")) +
+  scale_shape_manual(values=c(18,20),limits=c("PPT","Tair")) +
+  theme(legend.position="") + 
+  labs(title = paste0("Normalised covariates of antecedent terms from SAM_PT modelling for each site - ",
+                      Nlag-1,
+                      " year lag"),
+       y = "Mean Covariate Value") +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), 
+        axis.line = element_line(colour = "black"))
+
+grid.arrange(alphaPlot)
