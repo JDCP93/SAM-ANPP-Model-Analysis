@@ -1,4 +1,4 @@
-SAM_PT <- function(Site,ANPP,Precip,Nlag,block,prior=FALSE){
+SAM_PT <- function(Site,ANPP,Precip,Tair,Nlag,block,prior=FALSE){
    
    # Function that runs a SAM model as per Ogle et al 2015 and outputs modelled
    # ANPP as well as a variety of performance metrics
@@ -41,7 +41,7 @@ SAM_PT <- function(Site,ANPP,Precip,Nlag,block,prior=FALSE){
                # Monthly precip data
                ,'ppt' = (Precip[,2:13])
                # Monthly temperature data
-               ,'Tair' = Tair[,2:13]
+               ,'Tair' = (Tair[,2:13])
                # Year ID for ANPP
                ,'YearID' = 1:nrow(ANPP)
                # Yearly ANPP data - comment this out to obtain the priors
