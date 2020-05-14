@@ -14,7 +14,7 @@ source("DataExtraction.R")
 source("TimeSeries.R")
 source("OrderSites.R")
 source("SAMFunction_P.R")
-source("SAMPlot.R")
+source("SAMPlot_P.R")
 source("SAMFunction_PT.R")
 
 # Source required packages
