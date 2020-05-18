@@ -43,7 +43,7 @@ Sites = c("Brandbjerg",
 
 # Decide the number of years of rainfall to consider when talking about antecedent
 # rainfall/temperature
-Nlag = 1
+Nlag = 2
 
 #*******************************************************************************
 # Data Extraction - This can be skipped if .Rdata files already exist
@@ -334,10 +334,14 @@ for (i in OrderedSites$ByMAT){
 }
 
 # Display the plots together
-grid.arrange(grobs=weightsPlots,
+if (length(weightsPlots) == 0){
+  print("No significant weights from SAM_P modelling")
+} else {
+  grid.arrange(grobs=weightsPlots,
              top = paste0("Weights for SAM_P Model per Site, ordered by MAT - ",
                           Nlag-1,
                           " year lag"))
+        }
 
 grid.arrange(grobs=ANPPPlots, 
              top = paste0("SAM_P Modelled vs 'Observed' ANPP per Site, ordered by MAT - ",
@@ -504,15 +508,22 @@ for (i in OrderedSites$ByMAT){
 }
 
 # Display the plots together
-grid.arrange(grobs=weightsPlots_P,
+if (length(weightsPlots_P) == 0){
+  print("No significant P weights from SAM_PT modelling")
+} else {
+  grid.arrange(grobs=weightsPlots_P,
              top = paste0("Significant P weights for SAM_PT Model per Site, ordered by MAT - ",
                           Nlag-1,
                           " year lag"))
-
-grid.arrange(grobs=weightsPlots_T,
+}
+if (length(weightsPlots_T) == 0){
+  print("No significant T weights from SAM_PT modelling")
+} else {
+  grid.arrange(grobs=weightsPlots_T,
              top = paste0("Significant T weights for SAM_PT Model per Site, ordered by MAT - ",
                           Nlag-1,
                           " year lag"))
+}
 
 grid.arrange(grobs=ANPPPlots_PT, 
              top = paste0("SAM_PT Modelled vs 'Observed' ANPP per Site, ordered by MAT - ",
