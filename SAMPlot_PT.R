@@ -52,12 +52,11 @@ plotWeights$Month = factor(plotWeights$Month,
                            levels = rev(c("Jan","Feb","Mar","Apr",
                                           "May","Jun","Jul","Aug",
                                           "Sep","Oct","Nov","Dec")))
-# Create plot
-weightsPlot = ggplot(plotWeights) +
+# Create plots for each variable
+weightsPlot_P = ggplot(plotWeights) +
               geom_errorbar(aes(x = Month, 
                                 ymin=Weights_P_min, 
                                 ymax = Weights_P_max),
-                            position=position_dodge(), 
                             linetype = "solid",
                             size=0.5,
                             color="blue") +
@@ -83,6 +82,34 @@ weightsPlot = ggplot(plotWeights) +
                   x = "Month/Year into Past",
                   y = "Weight")
  
+weightsPlot_T = ggplot(plotWeights) +
+                geom_errorbar(aes(x = Month, 
+                                  ymin=Weights_T_min, 
+                                  ymax = Weights_T_max),
+                              linetype = "solid",
+                              size=0.5,
+                              color="red") +
+                geom_point(aes(x = Month, y = Weights_T_mean), color = "red") +
+                geom_hline(yintercept = 1/(12*Nlag-3),
+                            linetype = "dashed") +
+                theme(axis.text.x = element_blank(),
+                      axis.ticks.x = element_blank(),
+                      legend.position = "none",
+                      panel.grid.major = element_blank(),
+                      panel.grid.minor = element_blank(),
+                      panel.background = element_blank(), 
+                      axis.line = element_line(colour = "black")) +
+                ylim(0,max(plotWeights$Weights_T_max*1.1)) +
+                facet_grid(.~YearIntoPast,
+                            scales = "free_x",
+                            switch = "x", 
+                            space = "free_y") +
+                labs(title = paste0(Site,
+                                    " - ",
+                                    length(data_Obs$ANPP[!is.na(data_Obs$ANPP)]),
+                                    " years"),
+                      x = "Month/Year into Past",
+                      y = "Weight")
   
 #*******************************************************************************
 # Plot of Modelled ANPP vs Observed ANPP
@@ -141,7 +168,9 @@ ANPPPlot <- ggplot() +
 
 # Create the output
 
-output = list("ANPPPlot"=ANPPPlot,"weightsPlot"=weightsPlot)
+output = list("ANPPPlot"=ANPPPlot,
+              "weightsPlot_P"=weightsPlot_P,
+              "weightsPlot_T"=weightsPlot_T)
 outputName = paste0(Site,"_Plots")
 assign(outputName,output)
 

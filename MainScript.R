@@ -16,6 +16,7 @@ source("OrderSites.R")
 source("SAMFunction_P.R")
 source("SAMPlot_P.R")
 source("SAMFunction_PT.R")
+source("SAMPlot_PT.R")
 
 # Source required packages
 library(ggplot2)
@@ -42,7 +43,7 @@ Sites = c("Brandbjerg",
 
 # Decide the number of years of rainfall to consider when talking about antecedent
 # rainfall/temperature
-Nlag = 5
+Nlag = 1
 
 #*******************************************************************************
 # Data Extraction - This can be skipped if .Rdata files already exist
@@ -471,3 +472,49 @@ alphaPlot = ggplot(data = alphas) +
         axis.line = element_line(colour = "black"))
 
 grid.arrange(alphaPlot)
+
+
+#*******************************************************************************
+# Plot monthly weights and modelled ANPP
+#*******************************************************************************
+
+# Initialise index and lists of plots
+k = 0
+j = 0
+m = 0
+ANPPPlots_PT = list()
+weightsPlots_P = list()
+weightsPlots_T = list()
+
+# Run the function for each site
+for (i in OrderedSites$ByMAT){
+  k = k + 1
+  outputName = paste0(i,"_Plots")
+  output = SAMPlot_PT(i,Nlag)
+  assign(outputName,output)
+  if (i %in% alphas$Site[alphas$Significant==1 & alphas$Variable=="PPT"]){
+    j = j + 1
+    weightsPlots_P[[j]] = (eval(parse(text=outputName)))$weightsPlot_P
+  }
+  if (i %in% alphas$Site[alphas$Significant==1 & alphas$Variable=="Tair"]){
+    m = m + 1
+    weightsPlots_T[[j]] = (eval(parse(text=outputName)))$weightsPlot_T
+  }
+  ANPPPlots_PT[[k]] = (eval(parse(text=outputName)))$ANPPPlot
+}
+
+# Display the plots together
+grid.arrange(grobs=weightsPlots_P,
+             top = paste0("Significant P weights for SAM_PT Model per Site, ordered by MAT - ",
+                          Nlag-1,
+                          " year lag"))
+
+grid.arrange(grobs=weightsPlots_T,
+             top = paste0("Significant T weights for SAM_PT Model per Site, ordered by MAT - ",
+                          Nlag-1,
+                          " year lag"))
+
+grid.arrange(grobs=ANPPPlots_PT, 
+             top = paste0("SAM_PT Modelled vs 'Observed' ANPP per Site, ordered by MAT - ",
+                          Nlag-1,
+                          " year lag"))
