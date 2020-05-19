@@ -222,7 +222,7 @@ grid.arrange(grobs=SitePlot,top="T vs ANPP per Site, ordered by MAT")
 block = timeblocks(1,(Nlag>1)*1,(Nlag>2)*(Nlag-2),0,0)$block
 
 for (i in Sites){
-  if (file.exists(paste0(i,"_P_posterior_",Nlag,"_",max(block),".Rdata"))){
+  if (file.exists(paste0(i,"_P_Obs_pos_",Nlag,"_",max(block),".Rdata"))){
     print(paste0("SAM_P output already exists for ",i," with lag ",Nlag," and ",max(block)," blocks"))
   } else {
     #Since all monthly data are full years, we can just straight up form matrices
@@ -353,7 +353,7 @@ grid.arrange(grobs=ANPPPlots,
 #*******************************************************************************
 
 for (i in Sites){
-  if (file.exists(paste0(i,"_PT_posterior_",Nlag,"_",max(block),".Rdata"))){
+  if (file.exists(paste0(i,"_PT_Obs_pos_",Nlag,"_",max(block),".Rdata"))){
     print(paste0("SAM_PT output already exists for ",i," with lag ",Nlag," and ",max(block)," blocks"))
   } else {
     #Since all monthly data are full years, we can just straight up form matrices
@@ -529,3 +529,9 @@ grid.arrange(grobs=ANPPPlots_PT,
              top = paste0("SAM_PT Modelled vs 'Observed' ANPP per Site, ordered by MAT - ",
                           Nlag-1,
                           " year lag"))
+
+
+#*******************************************************************************
+# Plot monthly weights and modelled ANPP
+#*******************************************************************************
+

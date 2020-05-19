@@ -1,10 +1,10 @@
-SAM_P <- function(Site,ANPP,Precip,Nlag,block,prior=FALSE){
+SAM_P <- function(Site,ANPP,Precip,Nlag,block,prior=FALSE,model="Obs"){
    
    # Function that runs a SAM model as per Ogle et al 2015 and outputs modelled
    # ANPP as well as a variety of performance metrics
    #  
    # Inputs:
-   # - Site = 6 character object to identify the site
+   # - Site = character object to identify the site
    # - Precip = a Mx12 matrix where each row corresponds to a year and each column
    #            corresponds to a certain month (i.e. column 1 = Jan, col 2 = Feb)
    # - ANPP = a Nx2 matrix where column 1 is the year and 
@@ -14,6 +14,8 @@ SAM_P <- function(Site,ANPP,Precip,Nlag,block,prior=FALSE){
    #           of year j is assigned to
    # - prior = Boolean operator. Default is FALSE. If TRUE, suppress ANPP 
    #           observation data so that priors are calculated
+   # - model = character vector naming the model from ANPP is taken. Default is
+   #           "Obs" where observations are used.
    # Outputs:
    # - ANPPmod = 4 vectors of modelled ANPP mean, sd, 2.5th and 97.5quantile
    # - alpha = mean, sd and quantiles for covariates in calculation of ANPP
@@ -103,7 +105,7 @@ SAM_P <- function(Site,ANPP,Precip,Nlag,block,prior=FALSE){
                           "cumulativeWeights"=cum.weightStats,
                           "yearlyWeights"=sumD1Stats,
                           "monthlyWeights"=weightOrderedStats)
-      name = paste0(Site,"_P_prior_",Nlag,"_",Data$Nblocks)  
+      name = paste0(Site,"_P_",model,"_pri_",Nlag,"_",Data$Nblocks)  
       assign(name,output)
       save(list=c(name),file=paste0(name,".Rdata"))
    }else{
@@ -144,7 +146,7 @@ SAM_P <- function(Site,ANPP,Precip,Nlag,block,prior=FALSE){
                           "NMSE"=NMSE)
    
       # Write output file
-      name = paste0(Site,"_P_posterior_",Nlag,"_",Data$Nblocks)
+      name = paste0(Site,"_P_",model,"_pos_",Nlag,"_",Data$Nblocks)
       assign(name,output)
       save(list=c(name),file=paste0(name,".Rdata"))
    
