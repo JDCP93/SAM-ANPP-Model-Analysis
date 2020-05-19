@@ -94,16 +94,16 @@ RunSAM = function(Site,Model="Obs",Nlag=3){
   
   # CHeck if SAM has already been run, and run if not
 
-  if (file.exists(paste0(i,"_P_",Model,"_pos_",Nlag,"_",max(block),".Rdata"))){
-    print(paste0("SAM_P output already exists for ",i," with lag ",Nlag," and ",max(block)," blocks, using ",Model," ANPP data"))
+  if (file.exists(paste0(Site,"_P_",Model,"_pos_",Nlag,"_",max(block),".Rdata"))){
+    print(paste0("SAM_P output already exists for ",Site," with lag ",Nlag," and ",max(block)," blocks, using ",Model," ANPP data"))
   } else {
-    SAM_P(Site,ANPP,Precip,Nlag,block,prior=FALSE,Model)
+    SAM_P(Site,ANPP,PPT,Nlag,block,prior=FALSE,Model)
   }
   
-  if (file.exists(paste0(i,"_PT_",Model,"_pos_",Nlag,"_",max(block),".Rdata"))){
-    print(paste0("SAM_PT output already exists for ",i," with lag ",Nlag," and ",max(block)," blocks, using ",Model," ANPP data"))
+  if (file.exists(paste0(Site,"_PT_",Model,"_pos_",Nlag,"_",max(block),".Rdata"))){
+    print(paste0("SAM_PT output already exists for ",Site," with lag ",Nlag," and ",max(block)," blocks, using ",Model," ANPP data"))
   } else {
-    SAM_PT(Site,ANPP,Precip,Tair,Nlag,block,prior=FALSE,Model)
+    SAM_PT(Site,ANPP,PPT,Tair,Nlag,block,prior=FALSE,Model)
   }
 
 }

@@ -41,9 +41,16 @@ Sites = c("Brandbjerg",
           "Stubai",
           "WB")
 
+# List the models
+Models = c("CABLE",
+           "DLEM",
+           "LPX",
+           "TC",
+           "TECO")
+
 # Decide the number of years of rainfall to consider when talking about antecedent
 # rainfall/temperature
-Nlag = 2
+Nlag = 3
 
 #*******************************************************************************
 # Data Extraction - This can be skipped if .Rdata files already exist
@@ -532,6 +539,12 @@ grid.arrange(grobs=ANPPPlots_PT,
 
 
 #*******************************************************************************
-# Plot monthly weights and modelled ANPP
+# Begin model comparison
 #*******************************************************************************
+source("RunSAM.R")
+for (Site in Sites){
+  for (Model in Models){
+    RunSAM(Site,Model,Nlag=3)
+  }
+}
 

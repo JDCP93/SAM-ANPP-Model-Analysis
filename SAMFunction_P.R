@@ -51,8 +51,8 @@ SAM_P <- function(Site,ANPP,Precip,Nlag,block,prior=FALSE,model="Obs"){
    # If we're calculating priors, suppress the observed data
    if (prior==TRUE){
       Data$ANPP = NULL
-      print(paste0("Running prior SAM_P model for ",Site," with lag ",Nlag," and ",Data$Nblocks, " blocks"))
-   }else{ print(paste0("Running posterior SAM_P model for ",Site," with lag ",Nlag," and ",Data$Nblocks, " blocks"))}
+      print(paste0("Running prior SAM_P model for ",Site," with lag ",Nlag," and ",Data$Nblocks, " blocks, using ",model," data"))
+   }else{ print(paste0("Running posterior SAM_P model for ",Site," with lag ",Nlag," and ",Data$Nblocks, " blocks, using ",model," data"))}
    # Define the parameters for the model operation
    # samples to be kept after burn in
    samples = 50000
