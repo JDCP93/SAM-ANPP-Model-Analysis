@@ -17,6 +17,9 @@ source("SAMFunction_P.R")
 source("SAMPlot_P.R")
 source("SAMFunction_PT.R")
 source("SAMPlot_PT.R")
+source("RunSAM.R")
+source("alphaPlot.R")
+
 
 # Source required packages
 library(ggplot2)
@@ -42,7 +45,8 @@ Sites = c("Brandbjerg",
           "WB")
 
 # List the models
-Models = c("CABLE",
+Models = c("Obs",
+           "CABLE",
            "DLEM",
            "LPX",
            "TC",
@@ -541,10 +545,24 @@ grid.arrange(grobs=ANPPPlots_PT,
 #*******************************************************************************
 # Begin model comparison
 #*******************************************************************************
-source("RunSAM.R")
+
+# RUn SAM for all sites and all model data
 for (Site in Sites){
   for (Model in Models){
     RunSAM(Site,Model,Nlag=3)
   }
 }
 
+# Plot the covariates for each model per site
+k = 0
+alphaPlots = list()
+
+for (Site in Sites){
+  k = k + 1
+  alphaPlots[[k]] = alphaPlot(Site,Models)
+}
+
+grid.arrange(grobs=alphaPlots, 
+             title = paste0("Normalised covariates of antecedent terms from SAM_PT modelling for a ",
+                            Nlag-1,
+                            " year lag"))
