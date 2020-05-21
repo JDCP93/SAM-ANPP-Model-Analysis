@@ -557,12 +557,15 @@ for (Site in Sites){
 k = 0
 alphaPlots = list()
 
-for (Site in Sites){
+for (Site in OrderedSites$ByLoS){
   k = k + 1
   alphaPlots[[k]] = alphaPlot(Site,Models)
 }
 
 grid.arrange(grobs=alphaPlots, 
              top = paste0("Normalised covariates of antecedent terms from SAM_PT modelling for a ",
-                            Nlag-1,
-                            " year lag"))
+                          Nlag-1,
+                          " year lag (Nlag = ",
+                          Nlag,
+                          ")"))
+

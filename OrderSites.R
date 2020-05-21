@@ -10,10 +10,10 @@ OrderSites = function(Sites){
 # - Sites: a character vector consisting of the names of the sites that will 
 #         have their data extracted
 # OUTPUTS:
-# - OrderedSites: A list of 3 character vectors, listing sites by mean annual 
-#                 temperature, mean annual precipitation and coefficient of
-#                 variation of precipitation. In all cases, these are listed
-#                 in ascending order
+# - OrderedSites: A list of 4 character vectors, listing sites by mean annual 
+#                 temperature, mean annual precipitation, coefficient of
+#                 variation of precipitation and length of the time series. 
+#                 In all cases, these are listed in ascending order
   
   
   
@@ -21,7 +21,8 @@ OrderSites = function(Sites){
   SiteVar = data.frame("Site" = rep(0,length(Sites)),
                        "MAT" = rep(0,length(Sites)),
                        "MAP" = rep(0,length(Sites)),
-                       "CVP" = rep(0,length(Sites)))
+                       "CVP" = rep(0,length(Sites)),
+                       "LoS" = rep(0,length(Sites)))
   k = 0 
   # Calculate CVP and MAT for each site
   for (i in Sites){
@@ -30,6 +31,7 @@ OrderSites = function(Sites){
     SiteVar$CVP[k] = sd(Data$PPT[!is.na(Data$ANPP)&Data$PPT>0])/mean(Data$PPT[!is.na(Data$ANPP)&Data$PPT>0])
     SiteVar$MAT[k] = mean(Data$Tair[!is.na(Data$ANPP)&Data$PPT>0])
     SiteVar$MAP[k] = mean(Data$PPT[!is.na(Data$ANPP)&Data$PPT>0])
+    SiteVar$LoS[k] = length(Data$ANPP[!is.na(Data$ANPP)&Data$PPT>0])
     SiteVar$Site[k] = i
   }
   
@@ -37,9 +39,11 @@ OrderSites = function(Sites){
   SitesByMAT = arrange(SiteVar,MAT)$Site
   SitesByMAP = arrange(SiteVar,MAP)$Site
   SitesByCVP = arrange(SiteVar,CVP)$Site
+  SitesByLoS = arrange(SiteVar,LoS)$Site
   
   OrderedSites = list("ByMAT" = SitesByMAT,
                       "ByMAP" = SitesByMAP,
-                      "ByCVP" = SitesByCVP)
+                      "ByCVP" = SitesByCVP,
+                      "ByLoS" = SitesByLoS)
   
 }
