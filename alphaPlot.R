@@ -34,6 +34,8 @@ for (Model in Models){
   alphas$Variable[k] = "Tair"
 }
 
+alphas$Model = factor(alphas$Model, levels = Models)
+
 # Plot
 alphaPlot = ggplot(data = alphas) +
   geom_hline(yintercept=0, linetype = "dashed",color="grey") +
