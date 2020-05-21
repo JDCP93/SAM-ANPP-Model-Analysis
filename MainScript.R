@@ -563,6 +563,6 @@ for (Site in Sites){
 }
 
 grid.arrange(grobs=alphaPlots, 
-             title = paste0("Normalised covariates of antecedent terms from SAM_PT modelling for a ",
+             top = paste0("Normalised covariates of antecedent terms from SAM_PT modelling for a ",
                             Nlag-1,
                             " year lag"))

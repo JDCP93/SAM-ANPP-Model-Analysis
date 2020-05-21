@@ -42,7 +42,10 @@ alphaPlot = ggplot(data = alphas) +
   geom_pointrange(aes(x=Variable,y=Mean,ymin=Min,ymax=Max,color=as.factor(Significant)),position = position_dodge(width = 0.5)) +
   scale_color_manual(values=c("black","red"),limits=c("0","1")) +
   theme(legend.position="") + 
-  labs(title = paste0(Site),
+  labs(title = paste0(Site,
+                      " - ",
+                      length(eval(parse(text=name))$ANPPmod$mean)+Nlag-1,
+                      " years"),
        y = "Mean Covariate Value") +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
