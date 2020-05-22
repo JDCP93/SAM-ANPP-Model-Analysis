@@ -553,15 +553,25 @@ for (Site in Sites){
   }
 }
 
-# Plot the covariates for each model per site
+#*******************************************************************************
+# Plot and analyze covariate values
+#*******************************************************************************
+
+# Initialise lists and index
 k = 0
 alphaPlots = list()
+alphas = list()
 
+# Run plotting function for each site
 for (Site in OrderedSites$ByLoS){
   k = k + 1
-  alphaPlots[[k]] = alphaPlotFunction(Site,Models)$alpha
+  output = alphaPlotFunction(Site,Models)
+  alphaPlots[[k]] = output$alphaPlot
+  name = paste0(Site,"_alphas")
+  assign(name,output$alphas)
 }
 
+# Arrange plots
 grid.arrange(grobs=alphaPlots, 
              top = paste0("Normalised covariates of antecedent terms from SAM_PT modelling for a ",
                           Nlag-1,
@@ -569,30 +579,38 @@ grid.arrange(grobs=alphaPlots,
                           Nlag,
                           ")"))
 
+
+#*******************************************************************************
+# Plot significant Monthly Weights
+#*******************************************************************************
+
 # Initialiase
 # Initialise index and lists of plots
 k = 0
-j = 0
 m = 0
+n = 0
 weightsPlots_P = list()
 weightsPlots_T = list()
+
+# Determine which weights are significant
+
+
 
 # Run the function for each site
 for (i in OrderedSites$ByLoS){
   for (j in Models){
     k = k + 1
-    outputName = paste0(i,"_",Model,"_Plots")
-    output = SAMPlot_PT(i,Nlag,Model)
+    outputName = paste0(i,"_",j,"_Plots")
+    output = SAMPlot_PT(i,Nlag,j)
     assign(outputName,output)
-  if (i %in% alphas$Site[alphas$Significant==1 & alphas$Variable=="PPT"]){
-    j = j + 1
-    weightsPlots_P[[j]] = (eval(parse(text=outputName)))$weightsPlot_P
+    if (i %in% alphas$Site[alphas$Significant==1 & alphas$Variable=="PPT"]){
+      m = m + 1
+      weightsPlots_P[[m]] = (eval(parse(text=outputName)))$weightsPlot_P
+    }
+    if (i %in% alphas$Site[alphas$Significant==1 & alphas$Variable=="Tair"]){
+      n = n + 1
+      weightsPlots_T[[n]] = (eval(parse(text=outputName)))$weightsPlot_T
+    }
   }
-  if (i %in% alphas$Site[alphas$Significant==1 & alphas$Variable=="Tair"]){
-    m = m + 1
-    weightsPlots_T[[j]] = (eval(parse(text=outputName)))$weightsPlot_T
-  }
-  ANPPPlots_PT[[k]] = (eval(parse(text=outputName)))$ANPPPlot
 }
-
 
