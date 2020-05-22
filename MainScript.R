@@ -566,7 +566,9 @@ alphas = list()
 for (Site in OrderedSites$ByLoS){
   k = k + 1
   output = alphaPlotFunction(Site,Models)
+  # Group the alpha plots
   alphaPlots[[k]] = output$alphaPlot
+  # Output the dataframe for future use
   name = paste0(Site,"_alphas")
   assign(name,output$alphas)
 }
@@ -584,15 +586,7 @@ grid.arrange(grobs=alphaPlots,
 # Plot significant Monthly Weights
 #*******************************************************************************
 
-# Initialiase
-# Initialise index and lists of plots
-
-
-# Determine which weights are significant
-
-
-
-# Run the function for each site
+# For each site
 for (i in OrderedSites$ByLoS){
   # Initiliase index and output lists
   m = 0
@@ -604,23 +598,24 @@ for (i in OrderedSites$ByLoS){
   for (j in Models){
     # Run SAMPlot_PT for the site and the model and assign to a consistent name
     output = SAMPlot_PT(i,Nlag,j)
+    # If the model's P alpha is significant in SAM, plot the monthly P weights 
     if (j %in% alphas$Model[alphas$Significant==1 & alphas$Variable=="PPT"]){
       m = m + 1
       weightsPlots_P[[m]] = output$weightsPlot_P
     }
+    # If the model's T alpha is significant in SAM, plot the monthly T weights 
     if (j %in% alphas$Model[alphas$Significant==1 & alphas$Variable=="Tair"]){
       n = n + 1
       weightsPlots_T[[n]] = output$weightsPlot_T
     }
   }
-  output = list("PPlots"=weightsPlots_P,"TPlots"=weightsPlots_T)
-  outputName = paste0(i,"_SigWeightPlots")
-  assign(outputName,output)
+  # If we have at least 1 significant P alpha for the site, let's see it!
   if (length(weightsPlots_P)>0){
-  grid.arrange(grobs = weightsPlots_P, top = "Significant P weights")
+  grid.arrange(grobs = weightsPlots_P, bottom = "Significant P weights")
   }
+  # If we have at least 1 significant T alpha for the site, let's see it!
   if (length(weightsPlots_T)>0){
-  grid.arrange(grobs = weightsPlots_T, top = "Significant T weights")
+  grid.arrange(grobs = weightsPlots_T, bottom = "Significant T weights")
   }
 }
 
