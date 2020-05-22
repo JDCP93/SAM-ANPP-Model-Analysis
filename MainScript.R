@@ -160,7 +160,7 @@ for (i in OrderedSites$ByMAT){
                size=4) +
     geom_smooth(aes(PPTant,ANPP),
                 formula = y ~ x,
-                method=MASS::rlm,
+                method=lm,
                 na.rm=TRUE) +
     labs(title=paste(i),
          tag=paste(k)) +
@@ -467,13 +467,20 @@ for (Site in Sites){
   # Check whether significantly different from zero (i.e. min and max have same sign)
   alphas$Significant[k] = 1*(sign(alphas$Min[k])==sign(alphas$Max[k]))
   alphas$Variable[k] = "Tair"
-
+  # Remove tje model output from memory to keep things clean
+  rm(list = name)
 }
 
 # Plot
 alphaPlot = ggplot(data = alphas) +
   geom_hline(yintercept=0, linetype = "dashed",color="grey") +
-  geom_pointrange(aes(x=Site,y=Mean,ymin=Min,ymax=Max,shape=Variable,color=as.factor(Significant)),position = position_dodge(width = 0.5)) +
+  geom_pointrange(aes(x=Site,
+                      y=Mean,
+                      ymin=Min,
+                      ymax=Max,
+                      shape=Variable,
+                      color=as.factor(Significant)),
+                  position = position_dodge(width = 0.5)) +
   scale_color_manual(values=c("black","red"),limits=c("0","1")) +
   scale_shape_manual(values=c(18,20),limits=c("PPT","Tair")) +
   theme(legend.position="") + 
