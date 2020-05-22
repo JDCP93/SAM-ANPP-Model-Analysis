@@ -594,22 +594,23 @@ grid.arrange(grobs=alphaPlots,
 
 # Run the function for each site
 for (i in OrderedSites$ByLoS){
+  # Initiliase index and output lists
   m = 0
   n = 0
   weightsPlots_P = list()
   weightsPlots_T = list()
+  # Assign site alphas to generic variable
   alphas = eval(as.name(paste0(i,"_alphas")))
   for (j in Models){
-    outputName = paste0(i,"_",j,"_Plots")
+    # Run SAMPlot_PT for the site and the model and assign to a consistent name
     output = SAMPlot_PT(i,Nlag,j)
-    assign(outputName,output)
     if (j %in% alphas$Model[alphas$Significant==1 & alphas$Variable=="PPT"]){
       m = m + 1
-      weightsPlots_P[[m]] = (eval(parse(text=outputName)))$weightsPlot_P
+      weightsPlots_P[[m]] = output$weightsPlot_P
     }
     if (j %in% alphas$Model[alphas$Significant==1 & alphas$Variable=="Tair"]){
       n = n + 1
-      weightsPlots_T[[n]] = (eval(parse(text=outputName)))$weightsPlot_T
+      weightsPlots_T[[n]] = output$weightsPlot_T
     }
   }
   output = list("PPlots"=weightsPlots_P,"TPlots"=weightsPlots_T)
