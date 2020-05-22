@@ -586,11 +586,7 @@ grid.arrange(grobs=alphaPlots,
 
 # Initialiase
 # Initialise index and lists of plots
-k = 0
-m = 0
-n = 0
-weightsPlots_P = list()
-weightsPlots_T = list()
+
 
 # Determine which weights are significant
 
@@ -598,19 +594,33 @@ weightsPlots_T = list()
 
 # Run the function for each site
 for (i in OrderedSites$ByLoS){
+  m = 0
+  n = 0
+  weightsPlots_P = list()
+  weightsPlots_T = list()
+  alphas = eval(as.name(paste0(i,"_alphas")))
   for (j in Models){
-    k = k + 1
     outputName = paste0(i,"_",j,"_Plots")
     output = SAMPlot_PT(i,Nlag,j)
     assign(outputName,output)
-    if (i %in% alphas$Site[alphas$Significant==1 & alphas$Variable=="PPT"]){
+    if (j %in% alphas$Model[alphas$Significant==1 & alphas$Variable=="PPT"]){
       m = m + 1
       weightsPlots_P[[m]] = (eval(parse(text=outputName)))$weightsPlot_P
     }
-    if (i %in% alphas$Site[alphas$Significant==1 & alphas$Variable=="Tair"]){
+    if (j %in% alphas$Model[alphas$Significant==1 & alphas$Variable=="Tair"]){
       n = n + 1
       weightsPlots_T[[n]] = (eval(parse(text=outputName)))$weightsPlot_T
     }
   }
+  output = list("PPlots"=weightsPlots_P,"TPlots"=weightsPlots_T)
+  outputName = paste0(i,"_SigWeightPlots")
+  assign(outputName,output)
+  if (length(weightsPlots_P)>0){
+  grid.arrange(grobs = weightsPlots_P, top = "Significant P weights")
+  }
+  if (length(weightsPlots_T)>0){
+  grid.arrange(grobs = weightsPlots_T, top = "Significant T weights")
+  }
 }
+
 
