@@ -513,7 +513,7 @@ for (i in OrderedSites$ByMAT){
   }
   if (i %in% alphas$Site[alphas$Significant==1 & alphas$Variable=="Tair"]){
     m = m + 1
-    weightsPlots_T[[j]] = (eval(parse(text=outputName)))$weightsPlot_T
+    weightsPlots_T[[m]] = (eval(parse(text=outputName)))$weightsPlot_T
   }
   ANPPPlots_PT[[k]] = (eval(parse(text=outputName)))$ANPPPlot
 }
@@ -569,5 +569,30 @@ grid.arrange(grobs=alphaPlots,
                           Nlag,
                           ")"))
 
+# Initialiase
+# Initialise index and lists of plots
+k = 0
+j = 0
+m = 0
+weightsPlots_P = list()
+weightsPlots_T = list()
+
+# Run the function for each site
+for (i in OrderedSites$ByLoS){
+  k = k + 1
+  outputName = paste0(i,"_Plots")
+  output = SAMPlot_PT(i,Nlag,"Obs")
+  assign(outputName,output)
+  if (i %in% alphas$Site[alphas$Significant==1 & alphas$Variable=="PPT"]){
+    j = j + 1
+    weightsPlots_P[[j]] = (eval(parse(text=outputName)))$weightsPlot_P
+  }
+  if (i %in% alphas$Site[alphas$Significant==1 & alphas$Variable=="Tair"]){
+    m = m + 1
+    weightsPlots_T[[j]] = (eval(parse(text=outputName)))$weightsPlot_T
+  }
+  ANPPPlots_PT[[k]] = (eval(parse(text=outputName)))$ANPPPlot
+}
 
 
+for (Site in OrderedSites)
