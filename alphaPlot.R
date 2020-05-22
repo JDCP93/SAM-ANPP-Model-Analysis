@@ -1,4 +1,4 @@
-alphaPlot = function(Site,Models){
+alphaPlotFunction = function(Site,Models){
 
 # Initialise dataframe
 k = 0
@@ -53,4 +53,6 @@ alphaPlot = ggplot(data = alphas) +
         axis.line = element_line(colour = "black")) +
   facet_wrap(~Model,
              scales = "free_y")
+
+alphaOutput = list("alphas"=alphas,"alphaPlot"=alphaPlot)
 }

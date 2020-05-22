@@ -559,7 +559,7 @@ alphaPlots = list()
 
 for (Site in OrderedSites$ByLoS){
   k = k + 1
-  alphaPlots[[k]] = alphaPlot(Site,Models)
+  alphaPlots[[k]] = alphaPlotFunction(Site,Models)$alpha
 }
 
 grid.arrange(grobs=alphaPlots, 
@@ -579,10 +579,11 @@ weightsPlots_T = list()
 
 # Run the function for each site
 for (i in OrderedSites$ByLoS){
-  k = k + 1
-  outputName = paste0(i,"_Plots")
-  output = SAMPlot_PT(i,Nlag,"Obs")
-  assign(outputName,output)
+  for (j in Models){
+    k = k + 1
+    outputName = paste0(i,"_",Model,"_Plots")
+    output = SAMPlot_PT(i,Nlag,Model)
+    assign(outputName,output)
   if (i %in% alphas$Site[alphas$Significant==1 & alphas$Variable=="PPT"]){
     j = j + 1
     weightsPlots_P[[j]] = (eval(parse(text=outputName)))$weightsPlot_P
@@ -595,4 +596,3 @@ for (i in OrderedSites$ByLoS){
 }
 
 
-for (Site in OrderedSites)
