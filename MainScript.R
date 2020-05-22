@@ -136,6 +136,9 @@ for (i in OrderedSites$ByMAT){
 # Plot all sites in one figure
 grid.arrange(grobs=SitePlot,top="P vs ANPP per Site, ordered by MAT")
 
+# Tidy up
+rm(list = c("plot","k","SitePlot"))
+
 #*******************************************************************************
 # Now plot ANPP vs previous year precipitation
 #*******************************************************************************
@@ -177,6 +180,8 @@ for (i in OrderedSites$ByMAT){
 # Plot all sites in one figure
 grid.arrange(grobs=SitePlot,top="Prior Year P vs ANPP per Site, order by MAT")
 
+# Tidy up
+rm(list = c("plot","k","SitePlot","Data"))
 
 #*******************************************************************************
 # Now plot ANPP vs temperature!
@@ -219,6 +224,8 @@ for (i in OrderedSites$ByMAT){
 # Plot all sites in one figure
 grid.arrange(grobs=SitePlot,top="T vs ANPP per Site, ordered by MAT")
 
+# Tidy up
+rm(list = c("plot","k","SitePlot","Data"))
 
 #*******************************************************************************
 # Perform SAM_P modelling
@@ -233,6 +240,7 @@ grid.arrange(grobs=SitePlot,top="T vs ANPP per Site, ordered by MAT")
 block = timeblocks(1,(Nlag>1)*1,(Nlag>2)*(Nlag-2),0,0)$block
 
 for (i in Sites){
+  # If the modelling has already been run, let us know and don't run again
   if (file.exists(paste0(i,"_P_Obs_pos_",Nlag,"_",max(block),".Rdata"))){
     print(paste0("SAM_P output already exists for ",i," with lag ",Nlag," and ",max(block)," blocks"))
   } else {
@@ -273,6 +281,9 @@ for (i in Sites){
   
     # We can now call the SAM function
     SAM_P(i,ANPP,PPT,Nlag,block,prior=FALSE)
+    
+    # Tidy up
+    rm(list = c("Data","ANPP","PPT"))
   }
 }
 
@@ -301,6 +312,8 @@ for (Site in Sites){
   alphas$Max[k] = eval(parse(text=name))$alphas$max[2]
   # Check whether significantly different from zero (i.e. min and max have same sign)
   alphas$Significant[k] = 1*(sign(alphas$Min[k])==sign(alphas$Max[k]))
+  # Remove variables from memory
+  rm(list = name)
 }
 
 # Plot
@@ -318,8 +331,11 @@ alphaPlot = ggplot(data = alphas) +
         panel.background = element_blank(), 
         axis.line = element_line(colour = "black"))
 
+# Show plot
 grid.arrange(alphaPlot)
 
+# Tidy up
+rm(list = "alphaPlot")
 
 #*******************************************************************************
 # Plot the SAM_P model results
@@ -333,18 +349,21 @@ weightsPlots = list()
 
 # Run the function for each site
 for (i in OrderedSites$ByMAT){
+  # Increase index
   k = k + 1
-  outputName = paste0(i,"_Plots")
+  # Run plotting
   output = SAMPlot_P(i,Nlag)
-  assign(outputName,output)
+  # If alpha is significantly different from 0, keep the plot of monthly weights
   if (i %in% alphas$Site[alphas$Significant==1]){
     j = j + 1
-    weightsPlots[[j]] = (eval(parse(text=outputName)))$weightsPlot
+    weightsPlots[[j]] = output$weightsPlot
   }
-  ANPPPlots[[k]] = (eval(parse(text=outputName)))$ANPPPlot
+  # Keep SAM modelled ANPP
+  ANPPPlots[[k]] = output$ANPPPlot
 }
 
-# Display the plots together
+# Display the significant monthly weights
+# First make sure there is something to plot
 if (length(weightsPlots) == 0){
   print("No significant weights from SAM_P modelling")
 } else {
@@ -353,17 +372,21 @@ if (length(weightsPlots) == 0){
                           Nlag-1,
                           " year lag"))
         }
-
+# Display ANPP plots of all sites
 grid.arrange(grobs=ANPPPlots, 
              top = paste0("SAM_P Modelled vs 'Observed' ANPP per Site, ordered by MAT - ",
                           Nlag-1,
                           " year lag"))
+
+# Tidy up
+rm(list = c("weightsPlots","ANPPPlots","output","k","j"))
 
 #*******************************************************************************
 # Perform SAM_PT modelling
 #*******************************************************************************
 
 for (i in Sites){
+  # If the modelling has already been run, let us know and don't run again
   if (file.exists(paste0(i,"_PT_Obs_pos_",Nlag,"_",max(block),".Rdata"))){
     print(paste0("SAM_PT output already exists for ",i," with lag ",Nlag," and ",max(block)," blocks"))
   } else {
@@ -427,9 +450,11 @@ for (i in Sites){
     
     # We can now call the SAM function
     SAM_PT(i,ANPP,PPT,Tair,Nlag,block,prior=FALSE)
+    
+    # Tidy up
+    rm(list = c("Data","ANPP","PPT","Tair"))
   }
 }
-
 
 #*******************************************************************************
 # Plot of alphas to assess significance
@@ -467,11 +492,11 @@ for (Site in Sites){
   # Check whether significantly different from zero (i.e. min and max have same sign)
   alphas$Significant[k] = 1*(sign(alphas$Min[k])==sign(alphas$Max[k]))
   alphas$Variable[k] = "Tair"
-  # Remove tje model output from memory to keep things clean
+  # Remove the model output from memory to keep things clean
   rm(list = name)
 }
 
-# Plot
+# Create the plot
 alphaPlot = ggplot(data = alphas) +
   geom_hline(yintercept=0, linetype = "dashed",color="grey") +
   geom_pointrange(aes(x=Site,
@@ -493,8 +518,11 @@ alphaPlot = ggplot(data = alphas) +
         panel.background = element_blank(), 
         axis.line = element_line(colour = "black"))
 
+# Show the plot
 grid.arrange(alphaPlot)
 
+# Tidy up
+rm(list = "alphaPlot","k")
 
 #*******************************************************************************
 # Plot monthly weights and modelled ANPP
@@ -511,43 +539,60 @@ weightsPlots_T = list()
 # Run the function for each site
 for (i in OrderedSites$ByMAT){
   k = k + 1
-  outputName = paste0(i,"_Plots")
+  # Assign function output to generic variable
   output = SAMPlot_PT(i,Nlag,"Obs")
-  assign(outputName,output)
+  # If P alpha is significant, plot the monthly weights for antecedent P
   if (i %in% alphas$Site[alphas$Significant==1 & alphas$Variable=="PPT"]){
     j = j + 1
-    weightsPlots_P[[j]] = (eval(parse(text=outputName)))$weightsPlot_P
+    weightsPlots_P[[j]] = output$weightsPlot_P
   }
+  # If P alpha is significant, plot the monthly weights for antecedent P
   if (i %in% alphas$Site[alphas$Significant==1 & alphas$Variable=="Tair"]){
     m = m + 1
-    weightsPlots_T[[m]] = (eval(parse(text=outputName)))$weightsPlot_T
+    weightsPlots_T[[m]] = output$weightsPlot_T
   }
-  ANPPPlots_PT[[k]] = (eval(parse(text=outputName)))$ANPPPlot
+  # Plot the SAM modelled ANPP
+  ANPPPlots_PT[[k]] = output$ANPPPlot
+  # Tidy up
+  rm(list = "output")
 }
 
 # Display the plots together
+# If no significant P alphas, don't plot anything
 if (length(weightsPlots_P) == 0){
   print("No significant P weights from SAM_PT modelling")
 } else {
+  # Otherwise plot the weights
   grid.arrange(grobs=weightsPlots_P,
              top = paste0("Significant P weights for SAM_PT Model per Site, ordered by MAT - ",
                           Nlag-1,
                           " year lag"))
 }
+# If no significant T alphas, don't plot anything
 if (length(weightsPlots_T) == 0){
   print("No significant T weights from SAM_PT modelling")
 } else {
+  # Otherwise plot the weights
   grid.arrange(grobs=weightsPlots_T,
              top = paste0("Significant T weights for SAM_PT Model per Site, ordered by MAT - ",
                           Nlag-1,
                           " year lag"))
 }
 
+# Plot the ANPP results
 grid.arrange(grobs=ANPPPlots_PT, 
              top = paste0("SAM_PT Modelled vs 'Observed' ANPP per Site, ordered by MAT - ",
                           Nlag-1,
                           " year lag"))
 
+# Tidy up
+rm(list = c("weightsPlots_P",
+            "weightsPlots_T",
+            "ANPPPlots_PT",
+            "k",
+            "j",
+            "m",
+            "alphas"))
 
 #*******************************************************************************
 # Begin model comparison
@@ -560,6 +605,8 @@ for (Site in Sites){
   }
 }
 
+# Tidy up
+rm(list = c("Site","Model"))
 #*******************************************************************************
 # Plot and analyze covariate values
 #*******************************************************************************
@@ -588,6 +635,8 @@ grid.arrange(grobs=alphaPlots,
                           Nlag,
                           ")"))
 
+# Tidy up
+rm(list = c("output","name","alphaPlots","k","Site"))
 
 #*******************************************************************************
 # Plot significant Monthly Weights
@@ -626,4 +675,10 @@ for (i in OrderedSites$ByLoS){
   }
 }
 
+# Tidy up
+rm(list = c("weightsPlots_P",
+            "weightsPlots_T",
+            "output",
+            "alphas",
+            "m","n","i","j"))
 
