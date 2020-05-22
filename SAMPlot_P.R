@@ -19,7 +19,7 @@ SAMPlot_P = function(Site,Nlag){
 
   
 # Load the SAM model output for the site
-name = paste0(Site,"_P_posterior_",Nlag,"_",12+((Nlag>1)*6)+((Nlag>2)*(Nlag-2)*4))
+name = paste0(Site,"_P_Obs_pos_",Nlag,"_",12+((Nlag>1)*6)+((Nlag>2)*(Nlag-2)*4))
 load(paste0(name,".Rdata"))
 
 # Change name to an expression

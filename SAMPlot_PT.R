@@ -1,4 +1,4 @@
-SAMPlot_PT = function(Site,Nlag){
+SAMPlot_PT = function(Site,Nlag,Model){
   
 #*******************************************************************************
 # Function Description
@@ -19,7 +19,7 @@ SAMPlot_PT = function(Site,Nlag){
 
   
 # Load the SAM model output for the site
-name = paste0(Site,"_PT_posterior_",Nlag,"_",12+((Nlag>1)*6)+((Nlag>2)*(Nlag-2)*4))
+name = paste0(Site,"_PT_",Model,"_pos_",Nlag,"_",12+((Nlag>1)*6)+((Nlag>2)*(Nlag-2)*4))
 load(paste0(name,".Rdata"))
 
 # Change name to an expression
@@ -75,10 +75,7 @@ weightsPlot_P = ggplot(plotWeights) +
                         scales = "free_x",
                         switch = "x", 
                         space = "free_y") +
-             labs(title = paste0(Site,
-                                 " - ",
-                                 length(data_Obs$ANPP[!is.na(data_Obs$ANPP)]),
-                                 " years"),
+             labs(title = paste0(Site," - ",Model),
                   x = "Month/Year into Past",
                   y = "Weight")
  
@@ -104,10 +101,7 @@ weightsPlot_T = ggplot(plotWeights) +
                             scales = "free_x",
                             switch = "x", 
                             space = "free_y") +
-                labs(title = paste0(Site,
-                                    " - ",
-                                    length(data_Obs$ANPP[!is.na(data_Obs$ANPP)]),
-                                    " years"),
+                labs(title = paste0(Site," - ",Model),
                       x = "Month/Year into Past",
                       y = "Weight")
   

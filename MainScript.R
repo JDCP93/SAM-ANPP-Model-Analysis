@@ -291,7 +291,7 @@ alphas = data.frame("Site" = rep(0,length(Sites)),
 # This is done outside of SAMPlot as all sites will be on one set of axes
 for (Site in Sites){
   # Load the SAM model output for the site
-  name = paste0(Site,"_P_posterior_",Nlag,"_",12+((Nlag>1)*6)+((Nlag>2)*(Nlag-2)*4))
+  name = paste0(Site,"_P_Obs_pos_",Nlag,"_",12+((Nlag>1)*6)+((Nlag>2)*(Nlag-2)*4))
   load(paste0(name,".Rdata"))
   # Extract the data needed
   k = k + 1
@@ -448,7 +448,7 @@ alphas = data.frame("Site" = rep(0,2*length(Sites)),
 # This is done outside of SAMPlot as all sites will be on one set of axes
 for (Site in Sites){
   # Load the SAM model output for the site
-  name = paste0(Site,"_PT_posterior_",Nlag,"_",12+((Nlag>1)*6)+((Nlag>2)*(Nlag-2)*4))
+  name = paste0(Site,"_PT_Obs_pos_",Nlag,"_",12+((Nlag>1)*6)+((Nlag>2)*(Nlag-2)*4))
   load(paste0(name,".Rdata"))
   # Extract the data needed
   k = k + 1
@@ -505,7 +505,7 @@ weightsPlots_T = list()
 for (i in OrderedSites$ByMAT){
   k = k + 1
   outputName = paste0(i,"_Plots")
-  output = SAMPlot_PT(i,Nlag)
+  output = SAMPlot_PT(i,Nlag,"Obs")
   assign(outputName,output)
   if (i %in% alphas$Site[alphas$Significant==1 & alphas$Variable=="PPT"]){
     j = j + 1
@@ -568,4 +568,6 @@ grid.arrange(grobs=alphaPlots,
                           " year lag (Nlag = ",
                           Nlag,
                           ")"))
+
+
 
