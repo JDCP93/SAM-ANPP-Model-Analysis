@@ -55,6 +55,17 @@ Below is a plot of monthly weights for antecedent precipitation for one site (Sh
 
 ![](plots/SGSModelPWeights.png)
 
+I have the following questions:
+
+* What statements can be confidently made from these results? It appears that year 0 precipitation has a higher weighting in all models but would the following be a reasonable conclusion? "The TECO and DLEM models assign higher weighting to year 2 than LPX and TC". 
+* How can the significance of the weights be assessed? At what point can we confidently state "Precipitation in month i has more importance than in month j for productivity of the site". Is a higher weight enough? Does the CI need to exclude the prior?
+* In Ogle et al (2015), the weights are plotted cumulatively and the prior months affecting rainfall are assumed to be all those that occur before the weights sum to 0.9. Is there a reason for preferring this method to the plot above? Similar to question 1, the point at which 0.9 is reached is not independent of the length of lag considered.
+
+### Question 3: The length of data series
+
+The below is a plot of $\alpha_{2}$ and $\alpha_{3}$ for the sites using observed ANPP. The plots are ordered by length of data available and there is a clear correlation between this and the significance of the $\alpha_{k}$
+
+
 ### Bibliography
 
 Ogle, K., Barber, J.J., Barron-Gafford, G.A., Bentley, L.P., Young, J.M., Huxman, T.E., Loik, M.E., Tissue, D.T., 2015. Quantifying ecological memory in plant and ecosystem processes. Ecol Lett 18, 221–235. https://doi.org/10.1111/ele.12399
