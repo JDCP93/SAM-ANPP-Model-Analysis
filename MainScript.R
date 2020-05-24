@@ -19,6 +19,7 @@ source("SAMFunction_PT.R")
 source("SAMPlot_PT.R")
 source("RunSAM.R")
 source("alphaPlot.R")
+source("ANPPReorder.R")
 
 
 # Source required packages
@@ -682,3 +683,16 @@ rm(list = c("weightsPlots_P",
             "alphas",
             "m","n","i","j"))
 
+
+#*******************************************************************************
+# Test with reordered time series
+#*******************************************************************************
+
+# Create reordered 
+for (Site in Sites){
+  if (file.exists(paste0(Site,"_Reorder_MonthlyData.Rdata"))&file.exists(paste0(Site,"_Reorder_YearlyData.Rdata"))){
+    print(paste0("Reordered time series already exist for ",Site))
+  } else {
+  ANPPReorder(Site)
+  }
+}
