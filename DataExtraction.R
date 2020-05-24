@@ -74,17 +74,18 @@ for (Site in Sites){
   Time = ncvar_get(MODEL,"day")
   ANPP = ncvar_get(MODEL,"NPPabove")
   GPP = ncvar_get(MODEL,"GPP")
+  LAI = ncvar_get(MODEL,"LAI")
   
   # Find the time origin for the model data
   time_from = substr(ncatt_get(MODEL, "day")$units, 15, 33)
   Time = as.POSIXct(Time, origin=time_from)
   
   # Create dataframe and extract daily values
-  CABLE = data.frame("Date" = Time,"ANPP" = ANPP, "GPP" = GPP)
+  CABLE = data.frame("Date" = Time,"ANPP" = ANPP, "GPP" = GPP, "LAI" = LAI)
   CABLE = CABLE %>% mutate(Day = day(Date), Month = month(Date), Year = year(Date))
   
   DailyCABLE = CABLE %>% group_by(Year,Month,Day) %>%
-    summarize("ANPP_CABLE" = sum(ANPP), "GPP_CABLE" = sum(GPP))
+    summarize("ANPP_CABLE" = sum(ANPP), "GPP_CABLE" = sum(GPP), "LAI_CABLE" = mean(LAI))
   
   #Clean up
   nc_close(MODEL)
@@ -101,16 +102,17 @@ for (Site in Sites){
   Year = ncvar_get(MODEL,"year")
   ANPP = ncvar_get(MODEL,"above_npp")
   GPP = ncvar_get(MODEL,"gpp")
+  LAI = ncvar_get(MODEL,"LAI")
   
   # Create full date values
   Time = as.Date(Day-1,origin=paste0(Year,"-01-01"))
   
   # Create dataframe and extract daily values
-  DLEM = data.frame("Date" = Time,"ANPP" = ANPP, "GPP" = GPP)
+  DLEM = data.frame("Date" = Time,"ANPP" = ANPP, "GPP" = GPP, "LAI" = LAI)
   DLEM = DLEM %>% mutate(Day = day(Date), Month = month(Date), Year = year(Date))
   
   DailyDLEM = DLEM %>% group_by(Year,Month,Day) %>%
-    summarize("ANPP_DLEM" = sum(ANPP), "GPP_DLEM" = sum(GPP))
+    summarize("ANPP_DLEM" = sum(ANPP), "GPP_DLEM" = sum(GPP), "LAI_DLEM" = mean(LAI))
   
   #Clean up
   nc_close(MODEL)
@@ -131,17 +133,18 @@ for (Site in Sites){
   Time = ncvar_get(MODEL,"time")
   ANPP = ncvar_get(MODEL,"ANPP")
   GPP = ncvar_get(MODEL,"GPP")
+  LAI = ncvar_get(MODEL,"LAI")
   
   # Find the time origin for the model data
   time_from = substr(ncatt_get(MODEL, "time")$units, 12, 30)
   Time = as.Date(Time, origin=time_from)
   
   # Create dataframe and extract daily values
-  LPX = data.frame("Date" = Time,"ANPP" = ANPP, "GPP" = GPP)
+  LPX = data.frame("Date" = Time,"ANPP" = ANPP, "GPP" = GPP, "LAI" = LAI)
   LPX = LPX %>% mutate(Day = day(Date), Month = month(Date), Year = year(Date))
   
   DailyLPX = LPX %>% group_by(Year,Month,Day) %>%
-    summarize("ANPP_LPX" = sum(ANPP), "GPP_LPX" = sum(GPP))
+    summarize("ANPP_LPX" = sum(ANPP), "GPP_LPX" = sum(GPP), "LAI_LPX" = LAI)
   
   #Clean up
   nc_close(MODEL)
@@ -188,6 +191,7 @@ for (Site in Sites){
   Time = ncvar_get(MODEL,"Date Daily")
   ANPP = ncvar_get(MODEL,"NPPabove")
   GPP = ncvar_get(MODEL,"GPP")
+  LAI = ncvar_get(MODEL,"LAI")
   
   # Find the time origin for the model data
   # Note that I assume this is wrong, and they meant 2007 NOT 2207...
@@ -195,11 +199,11 @@ for (Site in Sites){
   Time = as.Date(Time, origin="0000-01-01")
   
   # Create dataframe and extract daily values
-  TC = data.frame("Date" = Time,"ANPP" = ANPP, "GPP" = GPP)
+  TC = data.frame("Date" = Time,"ANPP" = ANPP, "GPP" = GPP, "LAI" = LAI)
   TC = TC %>% mutate(Day = day(Date), Month = month(Date), Year = year(Date))
   
   DailyTC = TC %>% group_by(Year,Month,Day) %>%
-    summarize("ANPP_TC" = sum(ANPP), "GPP_TC" = sum(GPP))
+    summarize("ANPP_TC" = sum(ANPP), "GPP_TC" = sum(GPP), "LAI_TC" = mean(LAI))
   
   #Clean up
   nc_close(MODEL)
@@ -215,6 +219,7 @@ for (Site in Sites){
   Time = ncvar_get(MODEL,"Time")
   ANPP = ncvar_get(MODEL,"NPPabove")
   GPP = ncvar_get(MODEL,"GPP")
+  LAI = ncvar_get(MODEL,"LAI")
   
   # Find the time origin for the model data
   # Note that I assume this is wrong, and they meant 2007 NOT 2207...
@@ -222,11 +227,11 @@ for (Site in Sites){
   Time = as.POSIXct(Time*3600, origin=time_from)
   
   # Create dataframe and extract daily values
-  TECO = data.frame("Date" = Time,"ANPP" = ANPP, "GPP" = GPP)
+  TECO = data.frame("Date" = Time,"ANPP" = ANPP, "GPP" = GPP, "LAI" = LAI)
   TECO = TECO %>% mutate(Day = day(Date), Month = month(Date), Year = year(Date))
   
   DailyTECO = TECO %>% group_by(Year,Month,Day) %>%
-    summarize("ANPP_TECO" = sum(ANPP), "GPP_TECO" = sum(GPP))
+    summarize("ANPP_TECO" = sum(ANPP), "GPP_TECO" = sum(GPP), "LAI_TECO" = mean(LAI))
   
   #Clean up
   nc_close(MODEL)
