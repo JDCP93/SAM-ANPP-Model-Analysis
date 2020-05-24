@@ -47,9 +47,13 @@ I have two questions arising from this result:
 
 * Is the following statement correct: If $\alpha_{k}$ is significantly different from 0, antecedent rainfall/temperature is a driver of productivity, with importance derived from the monthly weights. If $\alpha_{k}$ is NOT significantly different from 0, the monthly weights have no real meaning.
 
-* When considering a lag of 3 years as opposed to a lag of 2 years, antecedent rainfall at Lahav is no longer significantly different from zero. This has implications in terms of the choice of lag length - using a longer lag can mask what appears to be possible antecedent effects. I believe this is due to the Dirichlet prior assigning equal prior to all weights. Is there a way of maintaining significance at earlier lags with a different prior assigning higher weights to more recent months? Is this behaviour desirable? 
+* When considering a lag of 3 years as opposed to a lag of 2 years, antecedent rainfall at Lahav is no longer significantly different from zero. This has implications in terms of the choice of lag length - using a longer lag can mask what appears to be possible antecedent effects. Is this behaviour desirable? I believe this occurs is due to the Dirichlet prior assigning equal prior to all weights. Is there a way of maintaining significance at earlier lags with a different prior assigning higher weights to more recent months? 
 
+### Question 2: Understanding monthly weights
 
+Below is a plot of monthly weights for antecedent precipitation for one site (Shortgrass Steppe). Each plot used ANPP data from various models in the SAM approach and all were found to have an $\alpha_{2}$ that was significantly different from 0.
+
+![](plots/SGSModelPWeights.png)
 
 ### Bibliography
 
