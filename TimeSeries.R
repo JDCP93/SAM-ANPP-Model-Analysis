@@ -27,16 +27,19 @@ TimeSeries = function(Site){
               "Tair" = mean(Tair), 
               "ANPP_CABLE" = sum(ANPP_CABLE,na.rm=TRUE),
               "GPP_CABLE" = sum(GPP_CABLE,na.rm=TRUE),
+              "LAI_CABLE" = mean(LAI_CABLE,na.rm=TRUE),
               "ANPP_DLEM" = sum(ANPP_DLEM,na.rm=TRUE),
               "GPP_DLEM" = sum(GPP_DLEM,na.rm=TRUE),
+              "LAI_DLEM" = mean(LAI_DLEM,na.rm=TRUE),
               "ANPP_LPX" = sum(ANPP_LPX,na.rm=TRUE),
               "GPP_LPX" = sum(GPP_LPX,na.rm=TRUE),
-              #            "ANPP_ORCHIDEE" = sum(ANPP_ORCHIDEE,na.rm=TRUE),
-              #            "GPP_ORCHIDEE" = sum(GPP_ORCHIDEE,na.rm=TRUE),
+              "LAI_LPX" = mean(LAI_LPX,na.rm=TRUE),
               "ANPP_TC" = sum(ANPP_TC,na.rm=TRUE),
               "GPP_TC" = sum(GPP_TC,na.rm=TRUE),
+              "LAI_TC" = mean(LAI_TC,na.rm=TRUE),
               "ANPP_TECO" = sum(ANPP_TECO,na.rm=TRUE),
-              "GPP_TECO" = sum(GPP_TECO,na.rm=TRUE)
+              "GPP_TECO" = sum(GPP_TECO,na.rm=TRUE),
+              "LAI_TECO" = mean(LAI_TECO,na.rm=TRUE)
     )
   
   # We want to make sure we only look at years where we have a full dataset (or at
@@ -59,16 +62,19 @@ TimeSeries = function(Site){
               "Tair" = mean(Tair), 
               "ANPP_CABLE" = sum(ANPP_CABLE,na.rm=TRUE),
               "GPP_CABLE" = sum(GPP_CABLE,na.rm=TRUE),
+              "LAI_CABLE" = mean(LAI_CABLE,na.rm=TRUE),
               "ANPP_DLEM" = sum(ANPP_DLEM,na.rm=TRUE),
               "GPP_DLEM" = sum(GPP_DLEM,na.rm=TRUE),
+              "LAI_DLEM" = mean(LAI_DLEM,na.rm=TRUE),
               "ANPP_LPX" = sum(ANPP_LPX,na.rm=TRUE),
               "GPP_LPX" = sum(GPP_LPX,na.rm=TRUE),
-              #           "ANPP_ORCHIDEE" = sum(ANPP_ORCHIDEE,na.rm=TRUE),
-              #            "GPP_ORCHIDEE" = sum(GPP_ORCHIDEE,na.rm=TRUE),
+              "LAI_LPX" = mean(LAI_LPX,na.rm=TRUE),
               "ANPP_TC" = sum(ANPP_TC,na.rm=TRUE),
               "GPP_TC" = sum(GPP_TC,na.rm=TRUE),
+              "LAI_TC" = mean(LAI_TC,na.rm=TRUE),
               "ANPP_TECO" = sum(ANPP_TECO,na.rm=TRUE),
-              "GPP_TECO" = sum(GPP_TECO,na.rm=TRUE)
+              "GPP_TECO" = sum(GPP_TECO,na.rm=TRUE),
+              "LAI_TECO" = mean(LAI_TECO,na.rm=TRUE)
     )
   
   # Add the observed data to the yearly model outputs
@@ -79,7 +85,7 @@ TimeSeries = function(Site){
   
   # For anality, reorder
   # FOR NOW REMOVE GPP AS WE DON'T HAVE OBSERVATIONS
-  YearlyData = YearlyData[,c(1,2,3,14,4,6,8,10,12)]
+  YearlyData = YearlyData[,c(1,2,3,19,4,6,7,9,10,12,13,15,16,18)]
   
   # Remove all years that don't have a full year's worth of data
   YearlyData = YearlyData[YearlyData$Year %in% FullYears,]
