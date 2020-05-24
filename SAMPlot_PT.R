@@ -73,8 +73,7 @@ weightsPlot_P = ggplot(plotWeights) +
              ylim(0,max(plotWeights$Weights_P_max*1.1)) +
              facet_grid(.~YearIntoPast,
                         scales = "free_x",
-                        switch = "x", 
-                        space = "free_y") +
+                        switch = "x") +
              labs(title = paste0(Site," - ",Model),
                   x = "Month/Year into Past",
                   y = "Weight")
@@ -99,8 +98,7 @@ weightsPlot_T = ggplot(plotWeights) +
                 ylim(0,max(plotWeights$Weights_T_max*1.1)) +
                 facet_grid(.~YearIntoPast,
                             scales = "free_x",
-                            switch = "x", 
-                            space = "free_y") +
+                            switch = "x") +
                 labs(title = paste0(Site," - ",Model),
                       x = "Month/Year into Past",
                       y = "Weight")
