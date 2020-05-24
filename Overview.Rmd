@@ -63,7 +63,14 @@ I have the following questions:
 
 ### Question 3: The length of data series
 
-The below is a plot of $\alpha_{2}$ and $\alpha_{3}$ for the sites using observed ANPP. The plots are ordered by length of data available and there is a clear correlation between this and the significance of the $\alpha_{k}$
+The below is a plot of $\alpha_{2}$ and $\alpha_{3}$ for the sites using observed ANPP as well as each of 5 models. The plots are ordered by length of data available and there is a clear correlation between this and the significance of the $\alpha_{k}$. Red indicates significantly different from 0. Covariate values are normalised about their mean to allow plotting on the same scale.
+
+![](plots/ModelAlphas.png)
+The following question has arisen from this plot:
+
+* Do you have any guidance regarding the length of data set necessary, given the number of parameters being estimated in SAM? The model used here is simple and ideally I would have more processes represented. Additionally, many flux data sets are shorter than 10 years which appears to the approximate cut off for significance here.
+* The model in Ogle et al (2015) as well as other SAM papers (e.g. Ryan et al, 2017) explicitly account for the current year in the variables while also including them within the antecedent term (e.g. the equivalent in my current model would be $\mu[i] = \alpha_{1} + \alpha_{2}*PPT[i] + \alpha_{3}*PPT_{ant}[i] + \alpha_{4}*Tair[i] + \alpha_{5}*Tair_{ant}[i]$). Why is this necessary when the current year's weather is included in the antecedent term with individual weights giving lots of freedom to assigning importance to these measurements?
+
 
 
 ### Bibliography
@@ -71,4 +78,7 @@ The below is a plot of $\alpha_{2}$ and $\alpha_{3}$ for the sites using observe
 Ogle, K., Barber, J.J., Barron-Gafford, G.A., Bentley, L.P., Young, J.M., Huxman, T.E., Loik, M.E., Tissue, D.T., 2015. Quantifying ecological memory in plant and ecosystem processes. Ecol Lett 18, 221–235. https://doi.org/10.1111/ele.12399
 
 Paschalis, A., Fatichi, S., Zscheischler, J., Ciais, P., Bahn, M., Boysen, L., Chang, J., Kauwe, M.D., Estiarte, M., Goll, D., Hanson, P.J., Harper, A.B., Hou, E., Kigel, J., Knapp, A.K., Larsen, K.S., Li, W., Lienert, S., Luo, Y., Meir, P., Nabel, J.E.M.S., Ogaya, R., Parolari, A.J., Peng, C., Peñuelas, J., Pongratz, J., Rambal, S., Schmidt, I.K., Shi, H., Sternberg, M., Tian, H., Tschumi, E., Ukkola, A., Vicca, S., Viovy, N., Wang, Y.-P., Wang, Z., Williams, K., Wu, D., Zhu, Q., 2020. Rainfall manipulation experiments as simulated by terrestrial biosphere models: Where do we stand? Global Change Biology 26, 3336–3355. https://doi.org/10.1111/gcb.15024
+
+Ryan, E.M., Ogle, K., Peltier, D., Walker, A.P., De Kauwe, M.G., Medlyn, B.E., Williams, D.G., Parton, W., Asao, S., Guenet, B., Harper, A.B., Lu, X., Luus, K.A., Zaehle, S., Shu, S., Werner, C., Xia, J., Pendall, E., 2017. Gross primary production responses to warming, elevated CO 2 , and irrigation: quantifying the drivers of ecosystem physiology in a semiarid grassland. Glob Change Biol 23, 3092–3106. https://doi.org/10.1111/gcb.13602
+
 
