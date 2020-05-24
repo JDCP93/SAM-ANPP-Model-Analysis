@@ -683,6 +683,29 @@ rm(list = c("weightsPlots_P",
             "alphas",
             "m","n","i","j"))
 
+#*******************************************************************************
+# Compare LAI profile in models to P weights
+#*******************************************************************************
+
+# For each site
+for (i in OrderedSites$ByLoS){
+  # Initiliase index and output lists
+  m = 0
+  Plots = list()
+  # Assign site alphas to generic variable
+  alphas = eval(as.name(paste0(i,"_alphas")))
+  for (j in Models){
+    # Check whether the model has any significant weights
+    if (j %in% alphas$Model[alphas$Significant==1]){
+      m = m + 1
+      Plots(m) = LAIPlot(i,j)
+    }
+  }
+  # If we have at least 1 significant alpha for the site, let's see LAI!
+  if (length(Plots)>0){
+    grid.arrange(grobs = Plots, bottom = "Significant T weights")
+  }
+}
 
 #*******************************************************************************
 # Test with reordered time series
