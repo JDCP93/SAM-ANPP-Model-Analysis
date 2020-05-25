@@ -70,7 +70,7 @@ weightsPlot_P = ggplot(plotWeights) +
                    panel.grid.minor = element_blank(),
                    panel.background = element_blank(), 
                    axis.line = element_line(colour = "black")) +
-             ylim(0,max(plotWeights$Weights_P_max*1.1)) +
+             ylim(0,1/Nlag) +
              facet_grid(.~YearIntoPast,
                         scales = "free_x",
                         switch = "x") +
@@ -95,7 +95,7 @@ weightsPlot_T = ggplot(plotWeights) +
                       panel.grid.minor = element_blank(),
                       panel.background = element_blank(), 
                       axis.line = element_line(colour = "black")) +
-                ylim(0,max(plotWeights$Weights_T_max*1.1)) +
+                ylim(0,1/Nlag) +
                 facet_grid(.~YearIntoPast,
                             scales = "free_x",
                             switch = "x") +
