@@ -11,8 +11,7 @@ LAIPlot = function(Site,Model){
 # - Model: A character vector with the name of the model
 # 
 # Outputs:
-# - weightsPlot: A ggplot of the monthly weights
-# - ANPPPlot: A ggplot of the observed, linearly modelled and SAM ANPP values
+# - Site_LAIPlot: A list consisting of the plot of mean monthly LAI 
 
 
 # Load the observations for the site
