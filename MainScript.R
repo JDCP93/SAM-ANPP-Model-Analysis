@@ -21,6 +21,8 @@ source("RunSAM.R")
 source("alphaPlot.R")
 source("ANPPReorder.R")
 source("LAIPlot.R")
+source("ReorderRunSAM.R")
+
 
 # Source required packages
 library(ggplot2)
@@ -711,11 +713,18 @@ for (i in OrderedSites$ByLoS){
 # Test with reordered time series
 #*******************************************************************************
 
-# Create reordered 
+# Create reordered time series
 for (Site in Sites){
   if (file.exists(paste0(Site,"_Reorder_MonthlyData.Rdata"))&file.exists(paste0(Site,"_Reorder_YearlyData.Rdata"))){
     print(paste0("Reordered time series already exist for ",Site))
   } else {
   ANPPReorder(Site)
+  }
+}
+
+# Run the reordered model
+for (Site in Sites){
+  for (Model in Models){
+    ReorderRunSAM(Site,Model,Nlag=3)
   }
 }

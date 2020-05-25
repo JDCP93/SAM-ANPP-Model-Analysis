@@ -25,15 +25,15 @@ data_monthly = eval(parse(text=name))
 #*******************************************************************************
 # This will allow the plots to share the same scale
 
+# Take out LAI data
 allLAI = data_monthly[, grepl("LAI",names(data_monthly))]
+# Group by month, taking means
 allLAI$group = rep(1:12,nrow(allLAI)/12)
-
 allLAI = allLAI %>%
         group_by(group) %>%
         summarise_all(mean) %>%
         select(-group)
-
-
+# Extract max and min
 maxLAI = max(allLAI) 
 minLAI = min(allLAI) 
 #*******************************************************************************
