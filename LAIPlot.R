@@ -26,21 +26,34 @@ load(paste0(name,".Rdata"))
 # Change name to a consistent expression
 data_monthly = eval(parse(text=name))
 
+
+#*******************************************************************************
+# Find max and min LAI for the site from any model
+#*******************************************************************************
+# This will allow the plots to share the same scale
+
+allLAI = data_monthly[, grepl("LAI",names(data_monthly))]
+allLAI$group = rep(1:12,nrow(allLAI)/12)
+
+allLAI = allLAI %>%
+        group_by(group) %>%
+        summarise_all(mean) %>%
+        select(-group)
+
+
+maxLAI = max(allLAI) 
+minLAI = min(allLAI) 
 #*******************************************************************************
 # Extract LAI data for the model
 #*******************************************************************************
-LAI = unname(unlist(data_monthly[colnames(data_monthly)==paste0("LAI_",Model)]))
-# Put into a matrix
-LAI = matrix(LAI,ncol=12,byrow = TRUE)
-# Calculate monthly means
-LAI = colMeans(LAI)
+LAI = unname(unlist(allLAI[colnames(allLAI)==paste0("LAI_",Model)]))
 # Assemble data frame
 LAI = data.frame("Month" = c("Jan","Feb","Mar","Apr",
                  "May","Jun","Jul","Aug",
                  "Sep","Oct","Nov","Dec"),"LAI"=LAI,"d"=1)
 
- # Assign factors so that months appear in order
- LAI$Month = factor(LAI$Month, 
+# Assign factors so that months appear in order
+LAI$Month = factor(LAI$Month, 
                    levels = (c("Jan","Feb","Mar","Apr",
                                "May","Jun","Jul","Aug",
                                "Sep","Oct","Nov","Dec")))
@@ -50,17 +63,13 @@ LAI = data.frame("Month" = c("Jan","Feb","Mar","Apr",
 Plot = ggplot(LAI) +
         geom_point(aes(x=Month,y=LAI,group = d)) +
         geom_line(aes(x=Month,y=LAI,group = d)) +
-        #scale_x_continuous(breaks=1:12, 
-        #                   labels=c("Jan","Feb","Mar","Apr",
-        #                            "May","Jun","Jul","Aug",
-        #                            "Sep","Oct","Nov","Dec")) +
         theme(axis.ticks.x = element_blank(),
               legend.position = "none",
               panel.grid.major = element_blank(),
               panel.grid.minor = element_blank(),
               panel.background = element_blank(), 
               axis.line = element_line(colour = "black")) +
-        ylim(0,7) +
+        ylim(0.99*minLAI,1.01*maxLAI) +
         labs(title = paste0(Site," - ",Model),
              x = "Month",
              y = "Mean LAI")

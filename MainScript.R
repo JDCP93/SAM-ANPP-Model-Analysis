@@ -20,7 +20,7 @@ source("SAMPlot_PT.R")
 source("RunSAM.R")
 source("alphaPlot.R")
 source("ANPPReorder.R")
-
+source("LAIPlot.R")
 
 # Source required packages
 library(ggplot2)
@@ -696,14 +696,14 @@ for (i in OrderedSites$ByLoS){
   alphas = eval(as.name(paste0(i,"_alphas")))
   for (j in Models){
     # Check whether the model has any significant weights
-    if (j %in% alphas$Model[alphas$Significant==1]){
+    if (j %in% alphas$Model[alphas$Significant==1] & j != "Obs"){
       m = m + 1
-      Plots(m) = LAIPlot(i,j)
+      Plots[m] = LAIPlot(i,j)
     }
   }
   # If we have at least 1 significant alpha for the site, let's see LAI!
   if (length(Plots)>0){
-    grid.arrange(grobs = Plots, bottom = "Significant T weights")
+    grid.arrange(grobs = Plots, bottom = "Model LAI Predictions")
   }
 }
 
