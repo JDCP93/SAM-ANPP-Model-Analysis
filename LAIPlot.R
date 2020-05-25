@@ -13,13 +13,6 @@ LAIPlot = function(Site,Model){
 # Outputs:
 # - Site_LAIPlot: A list consisting of the plot of mean monthly LAI 
 
-
-# Load the observations for the site
-name = paste0(Site,"_YearlyData")
-load(paste0(name,".Rdata"))
-# Change name to a consistent expression
-data_yearly = eval(parse(text=name))
-
 # Load the observations for the site
 name = paste0(Site,"_MonthlyData")
 load(paste0(name,".Rdata"))
