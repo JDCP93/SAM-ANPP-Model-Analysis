@@ -2,7 +2,7 @@
 title: "Project Summary"
 author: "Jon Page"
 date: "12/05/2020"
-output: github_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -57,5 +57,44 @@ In the below plots, diamonds (on the left) are the P covariate and circles (on t
 |<img src="Plots/PT_5_Alphas.png" width="600" height="400">|
 
 I see the below issues:
-- Similarly to the P model, site covariates lose significance when longer lags are explored. This is not ideal behaviour in the model.
-- Sites report differing significance of the P covariate between the P and PT models. What does this mean in terms of the site's dependence on antecedent P?
+
+  * Similarly to the P model, site covariates lose significance when longer lags are explored. This is not ideal behaviour in the model.
+  * Sites report differing significance of the P covariate between the P and PT models. What does this mean in terms of the site's dependence on antecedent P?
+  
+## Model Comparison
+  
+The SAM method is applied to all sites using the modelled ANPP data from the 5 models. The results can then be compared to SAM outputs for the observed ANPP. This will hopefully provide insight into the following:
+  
+* Whether models capture any lags evident in the data
+* Why models might differ in their outputs - do some models have a lag effect where others don't?
+
+![](Plots/ModelAlphas.png)
+
+Thoughts:
+
+* A clear result in the correlation between obtaining significant results for the covariates and the length of the data series available. 
+* Models exhibit greater occurrences of antecedent dependence than the observations. 
+* Martin pointed out that Prades has 13 years of data but no lagged P response. 
+* Lack of temperature dependence is likely due to use of mean monthly temperatures.
+* Could we test the longer sites out-of-sample? Run the model for say, 10 random consecutive years, and then see whether the significance remains and whether it still predicts ANPP with similar accuracy?
+
+#### SGS
+
+We now focus on SGS, in particular the antecedent P term, and look into the differences between the models. SGS is a grassland site with low MAT (8.5C) and low rainfall (300mm). These are both the 2nd lowest of all sites. Coefficient of variation for precipitation is high however at 0.4, the highest of all sites.
+
+The site is likely temperature and water limited. As such, when the precipitation falls is probably quite important. 
+
+
+![](Plots/SGSModelPWeights.png)
+
+No models show any real long-term seasonal lags with weights in years 1 and 2 being largely uniform. The lags are noticeably more heavily weighted to year 0 in DLEM, LPX and TC. However, observations of ANPP and P at SGS show no correlation. *How accurately do these models capture the behaviour at SGS?*
+
+Martin suggested that the difference between models might be due to LAI differences.
+
+![](Plots/SGSLAI.png)
+
+The models however have totally different LAI profiles. Martin suggests that looking into GPP might give further insight. The below equation is ANPP but I should remember that allocation to roots is another component of total GPP:
+
+$ANPP = GPP_{leaf} + GPP_{stem} - R_{A}$
+
+We want to determine why each model suggests that ANPP is related to P. It might be worth checking correlation of P to modelled ANPP for these models - do we even need the lags?
