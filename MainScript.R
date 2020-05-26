@@ -22,6 +22,7 @@ source("alphaPlot.R")
 source("ANPPReorder.R")
 source("LAIPlot.R")
 source("ReorderRunSAM.R")
+source("ReorderAlphaPlot.R")
 
 
 # Source required packages
@@ -705,13 +706,19 @@ for (i in OrderedSites$ByLoS){
   }
   # If we have at least 1 significant alpha for the site, let's see LAI!
   if (length(Plots)>0){
-    grid.arrange(grobs = Plots, bottom = "Model LAI Predictions")
+    grid.arrange(grobs = Plots, top = "Model LAI Predictions")
   }
 }
 
 #*******************************************************************************
 # Test with reordered time series
 #*******************************************************************************
+
+# We reorder the model outputs (and observations), keeping each year's ANPP and
+# climate data together but changing the order in which the years occur
+# To accommodate this, files are saved with "Reorder" in their name and all
+# functions have been replicated due to the filename conventions being hard
+# coded.
 
 # Create reordered time series
 for (Site in Sites){
@@ -728,3 +735,34 @@ for (Site in Sites){
     ReorderRunSAM(Site,Model,Nlag=3)
   }
 }
+
+#*******************************************************************************
+# Plot and analyze covariate values for reordered data
+#*******************************************************************************
+
+# Initialise lists and index
+k = 0
+alphaPlots = list()
+alphas = list()
+
+# Run plotting function for each site
+for (Site in OrderedSites$ByLoS){
+  k = k + 1
+  output = ReorderAlphaPlotFunction(Site,Models)
+  # Group the alpha plots
+  alphaPlots[[k]] = output$alphaPlot
+  # Output the dataframe for future use
+  name = paste0(Site,"_alphas")
+  assign(name,output$alphas)
+}
+
+# Arrange plots
+grid.arrange(grobs=alphaPlots, 
+             top = paste0("Normalised covariates of antecedent terms from reordered SAM_PT modelling for a ",
+                          Nlag-1,
+                          " year lag (Nlag = ",
+                          Nlag,
+                          ")"))
+
+# Tidy up
+rm(list = c("output","name","alphaPlots","k","Site"))
