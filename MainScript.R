@@ -21,9 +21,10 @@ source("RunSAM.R")
 source("alphaPlot.R")
 source("ANPPReorder.R")
 source("LAIPlot.R")
+source("ReorderSAMFunction_PT.R")
 source("ReorderRunSAM.R")
 source("ReorderAlphaPlot.R")
-
+source("ReorderSAMPlot_PT.R")
 
 # Source required packages
 library(ggplot2)
@@ -766,3 +767,47 @@ grid.arrange(grobs=alphaPlots,
 
 # Tidy up
 rm(list = c("output","name","alphaPlots","k","Site"))
+
+#*******************************************************************************
+# Plot significant Monthly Weights for reordered data
+#*******************************************************************************
+
+# For each site
+for (i in OrderedSites$ByLoS){
+  # Initiliase index and output lists
+  m = 0
+  n = 0
+  weightsPlots_P = list()
+  weightsPlots_T = list()
+  # Assign site alphas to generic variable
+  alphas = eval(as.name(paste0(i,"_alphas")))
+  for (j in Models){
+    # Run SAMPlot_PT for the site and the model and assign to a consistent name
+    output = ReorderSAMPlot_PT(i,Nlag,j)
+    # If the model's P alpha is significant in SAM, plot the monthly P weights 
+    if (j %in% alphas$Model[alphas$Significant==1 & alphas$Variable=="PPT"]){
+      m = m + 1
+      weightsPlots_P[[m]] = output$weightsPlot_P
+    }
+    # If the model's T alpha is significant in SAM, plot the monthly T weights 
+    if (j %in% alphas$Model[alphas$Significant==1 & alphas$Variable=="Tair"]){
+      n = n + 1
+      weightsPlots_T[[n]] = output$weightsPlot_T
+    }
+  }
+  # If we have at least 1 significant P alpha for the site, let's see it!
+  if (length(weightsPlots_P)>0){
+    grid.arrange(grobs = weightsPlots_P, bottom = "Significant P weights for Reordered Data")
+  }
+  # If we have at least 1 significant T alpha for the site, let's see it!
+  if (length(weightsPlots_T)>0){
+    grid.arrange(grobs = weightsPlots_T, bottom = "Significant T weights for Reordered Data")
+  }
+}
+
+# Tidy up
+rm(list = c("weightsPlots_P",
+            "weightsPlots_T",
+            "output",
+            "alphas",
+            "m","n","i","j"))
