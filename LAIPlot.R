@@ -27,23 +27,39 @@ data_monthly = eval(parse(text=name))
 
 # Take out LAI data
 allLAI = data_monthly[, grepl("LAI",names(data_monthly))]
+
 # Group by month, taking means
-allLAI$group = rep(1:12,nrow(allLAI)/12)
-allLAI = allLAI %>%
-        group_by(group) %>%
-        summarise_all(mean) %>%
-        select(-group)
-# Extract max and min
-maxLAI = max(allLAI) 
-minLAI = min(allLAI) 
+allLAI_mean = allLAI
+colnames(allLAI_mean) = paste0(colnames(allLAI_mean),"_mean")
+allLAI_mean$group = rep(1:12,nrow(allLAI_mean)/12)
+allLAI_mean = allLAI_mean %>%
+              group_by(group) %>%
+              summarise_all(mean)
+
+# Group by months, taking sd
+allLAI_sd = allLAI
+colnames(allLAI_sd) = paste0(colnames(allLAI_sd),"_sd")
+allLAI_sd$group = rep(1:12,nrow(allLAI)/12)
+allLAI_sd = allLAI_sd %>%
+  group_by(group) %>%
+  summarise_all(sd)
+
+# COmbine into one dataframe
+allLAI = merge(allLAI_mean,allLAI_sd,by="group")
+
+# Extract max and min for plotting purposes
+maxLAI = max(allLAI_mean[,-1]+allLAI_sd[,-1]) 
+minLAI = min(allLAI_mean-allLAI_sd) 
 #*******************************************************************************
 # Extract LAI data for the model
 #*******************************************************************************
-LAI = unname(unlist(allLAI[colnames(allLAI)==paste0("LAI_",Model)]))
+
+LAI = unname(unlist(allLAI[colnames(allLAI)==paste0("LAI_",Model,"_mean")]))
+LAI_sd = unname(unlist(allLAI[colnames(allLAI)==paste0("LAI_",Model,"_sd")]))
 # Assemble data frame
 LAI = data.frame("Month" = c("Jan","Feb","Mar","Apr",
                  "May","Jun","Jul","Aug",
-                 "Sep","Oct","Nov","Dec"),"LAI"=LAI,"d"=1)
+                 "Sep","Oct","Nov","Dec"),"LAI"=LAI,"SD"=LAI_sd,"d"=1)
 
 # Assign factors so that months appear in order
 LAI$Month = factor(LAI$Month, 
@@ -54,8 +70,9 @@ LAI$Month = factor(LAI$Month,
 
 # Create plots for mean monthly LAI
 Plot = ggplot(LAI) +
-        geom_point(aes(x=Month,y=LAI,group = d)) +
-        geom_line(aes(x=Month,y=LAI,group = d)) +
+        geom_point(aes(x=Month,y=LAI,group=d)) +
+        geom_errorbar(aes(x=Month,ymin=LAI-SD,ymax=LAI+SD,group=d)) +
+        geom_line(aes(x=Month,y=LAI,group=d)) +
         theme(axis.ticks.x = element_blank(),
               legend.position = "none",
               panel.grid.major = element_blank(),
