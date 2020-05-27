@@ -249,13 +249,32 @@ for (i in Sites){
   if (file.exists(paste0(i,"_P_Obs_pos_",Nlag,"_",max(block),".Rdata"))){
     print(paste0("SAM_P output already exists for ",i," with lag ",Nlag," and ",max(block)," blocks"))
   } else {
-    #Since all monthly data are full years, we can just straight up form matrices
-    # Reference the monthly data for the site
-    Data = eval(as.name(paste0(i,"_MonthlyData")))
+    
+    # Since all monthly data are full years, we can just straight up form matrices
+    # However, we want to remove any NaN data for ANPP that is at the beginning 
+    # or end of the data. If ANPP is missing in the middle of the data, SAM can
+    # deal with this. If it is missing at the ends, we can remove it without 
+    # affecting continuity of the data series.
+    # Load the yearly and monthly data
+    Y = eval(as.name(paste0(i,"_YearlyData")))
+    M = eval(as.name(paste0(i,"_MonthlyData")))
+    
+    # Remove any years at the end of the data where ANPP is missing
+    while(is.na(Y$ANPP[length(Y$ANPP)]) == TRUE){
+      Y = Y[-nrow(Y),]
+      M = M[-(nrow(Y)*12+1:12),]
+    }
+    # Remove any years at the start of the data where ANPP is missing
+    while(is.na(Y$ANPP[1]) == TRUE){
+      Y = Y[-1,]
+      M = M[-(1:12),]
+    }
+    
+    
     # Form the precipitation column into a matrix
-    PPT = matrix(Data$PPT,ncol=12,byrow = TRUE)
+    PPT = matrix(M$PPT,ncol=12,byrow = TRUE)
     # Add the years as the first column
-    PPT = cbind(unique(Data$Year),PPT)
+    PPT = cbind(unique(M$Year),PPT)
     # Name the columns for easy reference
     colnames(PPT) = c("Year",
                       "ppt1",
@@ -270,19 +289,15 @@ for (i in Sites){
                       "ppt10",
                       "ppt11",
                       "ppt12")
-    # Remove any rows with no observed ANPP
-    Data = eval(as.name(paste0(i,"_YearlyData")))
-    PPT = PPT[!is.na(Data$ANPP),]
-  
+
     # Create a ANPP matrix
 
-    ANPP = matrix(Data$Year,ncol=1)
-    ANPP = cbind(ANPP, Data$ANPP, 1:nrow(ANPP))
+    ANPP = matrix(Y$Year,ncol=1)
+    ANPP = cbind(ANPP, Y$ANPP, 1:nrow(ANPP))
     colnames(ANPP) = c("Year",
                       "ANPP",
                       "YearID")
-    # Remove any rows with no observed ANPP
-    ANPP = ANPP[!is.na(Data$ANPP),]
+
   
     # We can now call the SAM function
     SAM_P(i,ANPP,PPT,Nlag,block,prior=FALSE)
@@ -396,12 +411,25 @@ for (i in Sites){
     print(paste0("SAM_PT output already exists for ",i," with lag ",Nlag," and ",max(block)," blocks"))
   } else {
     #Since all monthly data are full years, we can just straight up form matrices
-    # Reference the monthly data for the site
-    Data = eval(as.name(paste0(i,"_MonthlyData")))
+
+    Y = eval(as.name(paste0(i,"_YearlyData")))
+    M = eval(as.name(paste0(i,"_MonthlyData")))
+    
+    # Remove any years at the end of the data where ANPP is missing
+    while(is.na(Y$ANPP[length(Y$ANPP)]) == TRUE){
+      Y = Y[-nrow(Y),]
+      M = M[-(nrow(Y)*12+1:12),]
+    }
+    # Remove any years at the start of the data where ANPP is missing
+    while(is.na(Y$ANPP[1]) == TRUE){
+      Y = Y[-1,]
+      M = M[-(1:12),]
+    }
+    
     # Form the precipitation column into a matrix
-    PPT = matrix(Data$PPT,ncol=12,byrow = TRUE)
+    PPT = matrix(M$PPT,ncol=12,byrow = TRUE)
     # Add the years as the first column
-    PPT = cbind(unique(Data$Year),PPT)
+    PPT = cbind(unique(M$Year),PPT)
     # Name the columns for easy reference
     colnames(PPT) = c("Year",
                       "ppt1",
@@ -416,16 +444,13 @@ for (i in Sites){
                       "ppt10",
                       "ppt11",
                       "ppt12")
-    # Remove any rows with no observed ANPP
-    Data = eval(as.name(paste0(i,"_YearlyData")))
-    PPT = PPT[!is.na(Data$ANPP),]
     
     # Form the Tair matrix
     Data = eval(as.name(paste0(i,"_MonthlyData")))
     # Form the Tair column into a matrix
-    Tair = matrix(Data$Tair,ncol=12,byrow = TRUE)
+    Tair = matrix(M$Tair,ncol=12,byrow = TRUE)
     # Add the years as the first column
-    Tair = cbind(unique(Data$Year),Tair)
+    Tair = cbind(unique(M$Year),Tair)
     # Name the columns for easy reference
     colnames(Tair) = c("Year",
                       "tair1",
@@ -440,24 +465,19 @@ for (i in Sites){
                       "tair10",
                       "tair11",
                       "tair12")
-    # Remove any rows with no observed ANPP
-    Data = eval(as.name(paste0(i,"_YearlyData")))
-    Tair = Tair[!is.na(Data$ANPP),]
     
     # Create a ANPP matrix
-    ANPP = matrix(Data$Year,ncol=1)
-    ANPP = cbind(ANPP, Data$ANPP, 1:nrow(ANPP))
+    ANPP = matrix(Y$Year,ncol=1)
+    ANPP = cbind(ANPP, Y$ANPP, 1:nrow(ANPP))
     colnames(ANPP) = c("Year",
                        "ANPP",
                        "YearID")
-    # Remove any rows with no observed ANPP
-    ANPP = ANPP[!is.na(Data$ANPP),]
     
     # We can now call the SAM function
     SAM_PT(i,ANPP,PPT,Tair,Nlag,block,prior=FALSE)
     
     # Tidy up
-    rm(list = c("Data","ANPP","PPT","Tair"))
+    rm(list = c("Y","M","ANPP","PPT","Tair"))
   }
 }
 

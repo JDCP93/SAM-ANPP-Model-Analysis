@@ -23,13 +23,24 @@ ReorderRunSAM = function(Site,Model="Obs",Nlag=3){
   
   
   #Create the input data
+  Y = eval(as.name(paste0(i,"_YearlyData")))
+  M = eval(as.name(paste0(i,"_MonthlyData")))
   
-  # Reference the monthly data for the site
-  Data = eval(as.name(paste0(Site,"_Reorder_MonthlyData")))
+  # Remove any years at the end of the data where ANPP is missing
+  while(is.na(Y$ANPP[length(Y$ANPP)]) == TRUE){
+    Y = Y[-nrow(Y),]
+    M = M[-(nrow(Y)*12+1:12),]
+  }
+  # Remove any years at the start of the data where ANPP is missing
+  while(is.na(Y$ANPP[1]) == TRUE){
+    Y = Y[-1,]
+    M = M[-(1:12),]
+  }
+  
   # Form the precipitation column into a matrix
-  PPT = matrix(Data$PPT,ncol=12,byrow = TRUE)
+  PPT = matrix(M$PPT,ncol=12,byrow = TRUE)
   # Add the years as the first column
-  PPT = cbind(unique(Data$Year),PPT)
+  PPT = cbind(unique(M$Year),PPT)
   # Name the columns for easy reference
   colnames(PPT) = c("Year",
                     "ppt1",
@@ -44,16 +55,11 @@ ReorderRunSAM = function(Site,Model="Obs",Nlag=3){
                     "ppt10",
                     "ppt11",
                     "ppt12")
-  # Remove any rows with no observed ANPP
-  Data = eval(as.name(paste0(Site,"_Reorder_YearlyData")))
-  PPT = PPT[!is.na(Data$ANPP),]
   
-  # Form the Tair matrix
-  Data = eval(as.name(paste0(Site,"_Reorder_MonthlyData")))
   # Form the Tair column into a matrix
-  Tair = matrix(Data$Tair,ncol=12,byrow = TRUE)
+  Tair = matrix(M$Tair,ncol=12,byrow = TRUE)
   # Add the years as the first column
-  Tair = cbind(unique(Data$Year),Tair)
+  Tair = cbind(unique(M$Year),Tair)
   # Name the columns for easy reference
   colnames(Tair) = c("Year",
                      "tair1",
@@ -68,25 +74,20 @@ ReorderRunSAM = function(Site,Model="Obs",Nlag=3){
                      "tair10",
                      "tair11",
                      "tair12")
-  # Remove any rows with no observed ANPP
-  Data = eval(as.name(paste0(Site,"_Reorder_YearlyData")))
-  Tair = Tair[!is.na(Data$ANPP),]
   
   # Create a ANPP matrix
   # Check where we are getting the ANPP data from 
   if (Model == "Obs"){
-    ANPPData = Data$ANPP
+    ANPPData = Y$ANPP
   } else {
-    ANPPData = unlist(unname(as.vector(Data[colnames(Data)==paste0("ANPP_",Model)])))
+    ANPPData = unlist(unname(as.vector(Y[colnames(Y)==paste0("ANPP_",Model)])))
   }
   #Form into a matrix and give proper names
-  ANPP = matrix(Data$Year,ncol=1)
+  ANPP = matrix(Y$Year,ncol=1)
   ANPP = cbind(ANPP, ANPPData, 1:nrow(ANPP))
   colnames(ANPP) = c("Year",
                      "ANPP",
                      "YearID")
-  # Remove any rows with no observed ANPP
-  ANPP = ANPP[!is.na(Data$ANPP),]
   
   # Create the standardised time block
   block = timeblocks(1,(Nlag>1)*1,(Nlag>2)*(Nlag-2),0,0)$block
