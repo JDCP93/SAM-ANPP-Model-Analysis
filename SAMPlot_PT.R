@@ -108,33 +108,48 @@ weightsPlot_T = ggplot(plotWeights) +
 #*******************************************************************************
 
 # Conduct a linear regression between yearly P + T and ANPP
-PPT = data_Obs$PPT[!is.na(data_Obs$ANPP)]
-Tair = data_Obs$Tair[!is.na(data_Obs$ANPP)]
-ANPP = data_Obs$ANPP[!is.na(data_Obs$ANPP)]
+PPT = data_Obs$PPT
+Tair = data_Obs$Tair
+ANPP = data_Obs$ANPP
 
-Model = lm(ANPP ~ PPT + Tair, data = data.frame("Tair"=Tair,"PPT"=PPT,"ANPP"=ANPP))
+LMModel = lm(ANPP ~ PPT + Tair, data = data.frame("Tair"=Tair,"PPT"=PPT,"ANPP"=ANPP))
 
 # Create dataframes for plotting
 ANPPobs = data.frame(Year=1:length(ANPP)+as.numeric(data_Obs$Year[1])-1,
                     ANPP_obs = ANPP)
 
 
-ANPPsam = data.frame(Year=1:length(data_SAM$ANPPmod$mean)+Nlag-2+as.numeric(data_Obs$Year[1]),
+ANPPsam = data.frame(Year=1:length(data_SAM$ANPPmod$mean)+Nlag-2+as.numeric(min(data_Obs$Year[!is.na(data_Obs$ANPP)])),
                     ANPP_SAM = data_SAM$ANPPmod$mean,
                     ANPP_SAMmin = data_SAM$ANPPmod$min,
                     ANPP_SAMmax = data_SAM$ANPPmod$max)
 
-ANPPlm = data.frame(Year=1:length(ANPP[!is.na(ANPP)])+as.numeric(data_Obs$Year[1])-1,
-                   ANPP_lm = Model$fitted.values)
+# Linear regression excludes NA values
+# Take fitted values
+ANPP_lm = LMModel$fitted.values
+
+# If we omitted NA values
+if (length(unname(LMModel$na.action[]))>0){
+  # For each omitted NA value
+  for (i in 1:length(unname(LMModel$na.action[]))){
+    # Insert NA back in
+    ANPP_lm = append(ANPP_lm,NA,unname(LMModel$na.action[i])-1)
+  }
+}
+
+ANPPlm = data.frame(Year=1:length(ANPP)+as.numeric(data_Obs$Year[1])-1,
+                    ANPP_lm)
+
 
 # Plot the graphs
 
 ANPPPlot <- ggplot() +
   geom_ribbon(data=ANPPsam, aes(x=Year, ymin=ANPP_SAMmin, ymax=ANPP_SAMmax), fill="red", alpha=0.4) +
   geom_line(data=ANPPsam,aes(Year,ANPP_SAM,color="SAM"),size = 2) +
-  geom_line(data=ANPPlm,aes(Year,ANPP_lm,color="LRM"), size = 2,linetype = "dashed") +
+  geom_point(data=ANPPlm,aes(x=Year,y=ANPP_lm,color="LRM"),size=2,na.rm=TRUE) +
+  geom_line(data=ANPPlm,aes(Year,ANPP_lm,color="LRM"), size = 1,linetype = "solid",na.rm=TRUE) +
   geom_point(data=ANPPobs,aes(x=Year,y=ANPP_obs,color="Obs"),size=3,na.rm=TRUE) +
-  geom_line(data=ANPPobs,aes(Year,ANPP_obs,color="Obs"), size = 1) +
+  geom_line(data=ANPPobs,aes(Year,ANPP_obs,color="Obs"), size = 1,na.rm=TRUE) +
   scale_color_manual(values=c("black", "blue", "red"), breaks = c("Obs","LRM","SAM")) +
   guides(color=guide_legend(title=NULL)) +
   theme_bw() +
@@ -147,9 +162,9 @@ ANPPPlot <- ggplot() +
                         ", DIC = ",
                         signif(data_SAM$DIC,3),
                         "\nLRM MAE = ",
-                        signif(mean(abs(Model$residuals[-(1:Nlag-1)])),4),
+                        signif(mean(abs(LMModel$residuals[-(1:Nlag-1)])),4),
                         ", R2 = ",
-                        signif(summary(Model)$r.squared,3))) +
+                        signif(summary(LMModel)$r.squared,3))) +
   scale_x_continuous(breaks = 1:length(ANPP)+as.numeric(data_Obs$Year[1])-1) +
   theme(legend.position = "right") +
   theme(legend.background = element_rect(colour = 'black', size = 0.5, linetype='solid')) +
