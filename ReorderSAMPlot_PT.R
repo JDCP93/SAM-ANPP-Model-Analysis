@@ -161,9 +161,9 @@ ANPPPlot <- ggplot() +
                         ", DIC = ",
                         signif(data_SAM$DIC,3),
                         "\nLRM MAE = ",
-                        signif(mean(abs(Model$residuals[-(1:Nlag-1)])),4),
+                        signif(mean(abs(LMModel$residuals[-(1:Nlag-1)])),4),
                         ", R2 = ",
-                        signif(summary(Model)$r.squared,3))) +
+                        signif(summary(LMModel)$r.squared,3))) +
   scale_x_continuous(breaks = 1:length(ANPP)+as.numeric(data_Obs$Year[1])-1) +
   theme(legend.position = "right") +
   theme(legend.background = element_rect(colour = 'black', size = 0.5, linetype='solid')) +
