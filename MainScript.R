@@ -25,6 +25,8 @@ source("ReorderSAMFunction_PT.R")
 source("ReorderRunSAM.R")
 source("ReorderAlphaPlot.R")
 source("ReorderSAMPlot_PT.R")
+source("SampleSAM.R")
+source("SampleSAMFunction_PT.R")
 
 # Source required packages
 library(ggplot2)
@@ -749,6 +751,32 @@ for (Site in Sites){
   }
 }
 
+# Create metrics to see how "reordered" the data is
+# Initialise
+ReorderMetric = data.frame("Site" = rep(0,length(Sites)),
+                           "PercentAdj" = rep(0,length(Sites)),
+                           "MaxSeq" = rep(0,length(Sites)))
+
+# Calculate percentage of years that are still adjacent and the longest sequence
+# of adjacent years
+k = 0
+for (Site in Sites){
+  k = k + 1
+  load(paste0(Site,"_Reorder_YearlyData.RData"))
+  data = eval(as.name(paste0(Site,"_Reorder_YearlyData")))
+  ReorderMetric[k,1] = Site
+  ReorderMetric[k,2] = sum(diff(data$Year)==1)/nrow(data)
+  seqLen = rle(diff(data$Year))
+  if (1 %in% diff(data$Year)){
+    ReorderMetric[k,3] = max(seqLen$lengths[seqLen$values==1])
+  } else {
+    ReorderMetric[k,3] = 0
+  }
+}
+# Reorder the metrics to show which ones might be most problematic
+ReorderMetric = arrange(ReorderMetric,desc(PercentAdj))
+
+
 # Run the reordered model
 for (Site in Sites){
   for (Model in Models){
@@ -831,3 +859,16 @@ rm(list = c("weightsPlots_P",
             "alphas",
             "m","n","i","j"))
 
+
+
+#*******************************************************************************
+# Testing OOS (kinda of)
+#*******************************************************************************
+# We run the model for Konza but use only 10 consecutive years of data.
+# Will we still see significance? Or will this disappear due to the shorter time
+# series being used. Also interestingly, will different 10 year periods report
+# different significance? 
+# Hypothesis: We will lose significance in some periods but retain it in others.
+# This will be due to the variability within the period considered.
+
+SampleSAM("Konza","Obs",3,10)
