@@ -27,7 +27,7 @@ SampleSAM = function(Site,Model="Obs",Nlag=3,SampleLength){
   for (j in 1:(nrow(Y)-SampleLength+1)){
     # First extract the data
     SampleY = Y[j:(j+SampleLength-1),]
-    SampleM = M[j:(j+SampleLength-1),]
+    SampleM = M[(((j-1)*12)+1):((j+SampleLength-1)*12),]
     # Extract some identifying info
     StartYear = SampleY$Year[1]
   # If the modelling has already been run, let us know and don't run again
@@ -102,7 +102,7 @@ SampleSAM = function(Site,Model="Obs",Nlag=3,SampleLength){
     
     
       # We can now call the SAM function
-      SampleSAM_PT(Site,ANPP,PPT,Nlag,block,prior=FALSE,Model,SampleLength,StartYear)
+      SampleSAM_PT(Site,ANPP,PPT,Tair,Nlag,block,prior=FALSE,Model,SampleLength,StartYear)
     
     }
   }
