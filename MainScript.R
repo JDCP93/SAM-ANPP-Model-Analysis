@@ -27,6 +27,7 @@ source("ReorderAlphaPlot.R")
 source("ReorderSAMPlot_PT.R")
 source("SampleSAM.R")
 source("SampleSAMFunction_PT.R")
+source("SampleAlphaPlot.R")
 
 # Source required packages
 library(ggplot2)
@@ -870,5 +871,13 @@ rm(list = c("weightsPlots_P",
 # different significance? 
 # Hypothesis: We will lose significance in some periods but retain it in others.
 # This will be due to the variability within the period considered.
+Nlag = 3
+SampleLength = 10
+Site = "Konza"
+Model = "Obs"
+SampleSAM(Site,Model,Nlag,SampleLength)
 
-SampleSAM("Konza","Obs",3,10)
+# Plot the alphas
+  output = SampleAlphaPlotFunction(Site,SampleLength)
+  output$alphaPlot
+
