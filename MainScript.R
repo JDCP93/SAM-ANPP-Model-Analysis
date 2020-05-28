@@ -303,7 +303,7 @@ for (i in Sites){
     SAM_P(i,ANPP,PPT,Nlag,block,prior=FALSE)
     
     # Tidy up
-    rm(list = c("Data","ANPP","PPT"))
+    rm(list = c("Y","M","ANPP","PPT"))
   }
 }
 
