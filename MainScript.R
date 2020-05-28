@@ -879,5 +879,5 @@ SampleSAM(Site,Model,Nlag,SampleLength)
 
 # Plot the alphas
   output = SampleAlphaPlotFunction(Site,SampleLength)
-  output$alphaPlot
+  grid.arrange(output$alphaPlot)
 
