@@ -23,8 +23,8 @@ ReorderRunSAM = function(Site,Model="Obs",Nlag=3){
   
   
   #Create the input data
-  Y = eval(as.name(paste0(i,"_YearlyData")))
-  M = eval(as.name(paste0(i,"_MonthlyData")))
+  Y = eval(as.name(paste0(Site,"_YearlyData")))
+  M = eval(as.name(paste0(Site,"_MonthlyData")))
   
   # Remove any years at the end of the data where ANPP is missing
   while(is.na(Y$ANPP[length(Y$ANPP)]) == TRUE){

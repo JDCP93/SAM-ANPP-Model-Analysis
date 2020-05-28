@@ -291,7 +291,6 @@ for (i in Sites){
                       "ppt12")
 
     # Create a ANPP matrix
-
     ANPP = matrix(Y$Year,ncol=1)
     ANPP = cbind(ANPP, Y$ANPP, 1:nrow(ANPP))
     colnames(ANPP) = c("Year",
@@ -831,3 +830,4 @@ rm(list = c("weightsPlots_P",
             "output",
             "alphas",
             "m","n","i","j"))
+

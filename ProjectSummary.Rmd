@@ -98,3 +98,15 @@ The models however have totally different LAI profiles. Martin suggests that loo
 $ANPP = GPP_{leaf} + GPP_{stem} - R_{A}$
 
 We want to determine why each model suggests that ANPP is related to P. It might be worth checking correlation of P to modelled ANPP for these models - do we even need the lags?
+
+
+## ISSUE 
+
+Some of the sites had missing ANPP data in the model of their datasets. The original method of removing these just, well, removed them and the corresponding years. This meant that the data series was no longer consecutive and may have affected the site results. The sites affected are:
+* Lahav
+* Matta
+* Prades
+* SGS
+
+Therefore, take all plots from prior to this point with scepticism. A new method of only removing years missing ANPP data only removes them from the beginning and end of the data series (because ideally we don't want missing ANPP). It leaves in any missing data in the middle of a time series (note all sites only had 1 year of missing data at most) as SAM can deal with this by inferring a value. 
+All old outputs for these 4 sites have been archived and new model runs are being conducted. Plots will be updated once these are complete.
