@@ -112,7 +112,7 @@ PPT = data_Obs$PPT
 Tair = data_Obs$Tair
 ANPP = data_Obs$ANPP
 
-Model = lm(ANPP ~ PPT + Tair, data = data.frame("Tair"=Tair,"PPT"=PPT,"ANPP"=ANPP))
+LMModel = lm(ANPP ~ PPT + Tair, data = data.frame("Tair"=Tair,"PPT"=PPT,"ANPP"=ANPP))
 
 # Create dataframes for plotting
 ANPPobs = data.frame(Year=1:length(ANPP)+as.numeric(data_Obs$Year[1])-1,
