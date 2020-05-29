@@ -126,3 +126,4 @@ I have written a script which runs SAM for every consecutive run of 10 years at 
 
 ![](Plots/KonzaSampleAlphas.png)
 
+This is very interesting. There is a period of time 1987-2000 which exhibits significance on P while nowhere else does. I need to look at these dates and see if there is anything different compared to the years that don't produce significance.
