@@ -9,6 +9,25 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## ISSUE - 27/05/2020
+
+Some of the sites had missing ANPP data in the middle of their datasets. The original method of removing these just, well, removed them and the corresponding years. This meant that the data series was no longer consecutive and may have affected the site results. The sites affected are:
+* Lahav
+* Matta
+* Prades
+* SGS
+
+e.g. At Lahav, the year 2005 was removed and so 2004 and 2006 became consecutive in the data series. 
+
+A new method of removing years missing ANPP data only removes them from the beginning and end of the data series (because ideally we don't want missing ANPP). It leaves in any missing data in the middle of a time series (note all sites only had 1 year of missing data at most) as SAM can deal with this by inferring a value for the missing year (this does increase the importance of a decent prior). 
+All old outputs for these 4 sites have been archived and new model runs are being conducted.
+
+This workbook has since been updated with the new model work and should now be correct.
+
+
+
+
+
 ## SAM ANPP Model Analysis
 
 This is a R Markdown file to collect my curated thoughts and outputs resulting from this project. I am attempting to explore the ability of various terrestial biosphere models (TBMs) to predict ecosystem productivity and the role that antecedent conditions of climatic drivers play in productivity responses.
@@ -76,7 +95,6 @@ Thoughts:
 * Models exhibit greater occurrences of antecedent dependence than the observations. 
 * Martin pointed out that Prades has 13 years of data but no lagged P response. 
 * Lack of temperature dependence is likely due to use of mean monthly temperatures.
-* Could we test the longer sites out-of-sample? Run the model for say, 10 random consecutive years, and then see whether the significance remains and whether it still predicts ANPP with similar accuracy?
 
 #### SGS
 
@@ -100,13 +118,11 @@ $ANPP = GPP_{leaf} + GPP_{stem} - R_{A}$
 We want to determine why each model suggests that ANPP is related to P. It might be worth checking correlation of P to modelled ANPP for these models - do we even need the lags?
 
 
-## ISSUE 
 
-Some of the sites had missing ANPP data in the model of their datasets. The original method of removing these just, well, removed them and the corresponding years. This meant that the data series was no longer consecutive and may have affected the site results. The sites affected are:
-* Lahav
-* Matta
-* Prades
-* SGS
 
-Therefore, take all plots from prior to this point with scepticism. A new method of only removing years missing ANPP data only removes them from the beginning and end of the data series (because ideally we don't want missing ANPP). It leaves in any missing data in the middle of a time series (note all sites only had 1 year of missing data at most) as SAM can deal with this by inferring a value. 
-All old outputs for these 4 sites have been archived and new model runs are being conducted. Plots will be updated once these are complete.
+## Testing sampled Konza data
+
+I have written a script which runs SAM for every consecutive run of 10 years at Konza. Note the script takes any site, model, or sample length. I used Konza and observations as this is the longest dataset.
+
+![](Plots/KonzaSampleAlphas.png)
+
