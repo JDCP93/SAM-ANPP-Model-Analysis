@@ -37,35 +37,43 @@ data_Obs = eval(parse(text=name))
 #*******************************************************************************
 
 # Assemble the dataframe for weight plottings
-plotWeights = data.frame("Weights"=as.vector((data_SAM$monthlyWeights$mean)),
+plotWeights = data.frame("Weights_P_mean"=as.vector(data_SAM$monthlyWeights$mean),
+                         "Weights_P_min"=as.vector(data_SAM$monthlyWeights$min),
+                         "Weights_P_max"=as.vector(data_SAM$monthlyWeights$max),
                          "YearIntoPast"=rep(0:(Nlag-1),each=12),
                          "Month"=rep(c("Dec","Nov","Oct","Sep", "Aug","Jul",
                                        "Jun", "May","Apr","Mar","Feb","Jan"),Nlag))
 
 # Assign factors so that months appear in order
-plotWeights$Month = factor(plotWeights$Month, levels = rev(c("Jan","Feb","Mar","Apr",
-                                                         "May","Jun","Jul","Aug",
-                                                         "Sep","Oct","Nov","Dec")))
-# Create plot
-weightsPlot <- ggplot(plotWeights,aes(x=YearIntoPast,y=Weights,fill=Month)) +
-               geom_bar(stat="identity", 
-                        position=position_dodge(), 
-                        linetype = "solid",
-                        size=0.5,
-                        color="black") +
-               theme(axis.text.x = element_blank(),
-                     axis.ticks.x = element_blank(),
-                     legend.position = "none",
-                     panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(),
-                     panel.background = element_blank(), 
-                     axis.line = element_line(colour = "black")) +
-               facet_grid(.~YearIntoPast,
-                          scales = "free_x",
-                          switch = "x", 
-                          space = "free_y") +
-               labs(title = paste0(Site," - ",length(data_Obs$ANPP[!is.na(data_Obs$ANPP)])," years"),
-                    x = "Month/Year into Past")
+plotWeights$Month = factor(plotWeights$Month, 
+                           levels = rev(c("Jan","Feb","Mar","Apr",
+                                          "May","Jun","Jul","Aug",
+                                          "Sep","Oct","Nov","Dec")))
+# Create plots for each variable
+weightsPlot = ggplot(plotWeights) +
+  geom_errorbar(aes(x = Month, 
+                    ymin=Weights_P_min, 
+                    ymax = Weights_P_max),
+                linetype = "solid",
+                size=0.5,
+                color="blue") +
+  geom_point(aes(x = Month, y = Weights_P_mean), color = "blue") +
+  geom_hline(yintercept = 1/(12*Nlag-3),
+             linetype = "dashed") +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        legend.position = "none",
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), 
+        axis.line = element_line(colour = "black")) +
+  ylim(0,1/Nlag) +
+  facet_grid(.~YearIntoPast,
+             scales = "free_x",
+             switch = "x") +
+  labs(title = paste0(Site),
+       x = "Month/Year into Past",
+       y = "Weight")
   
 #*******************************************************************************
 # Plot of Modelled ANPP vs Observed ANPP
