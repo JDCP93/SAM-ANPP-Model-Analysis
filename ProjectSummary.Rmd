@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## ISSUE - 27/05/2020
 
 Some of the sites had missing ANPP data in the middle of their datasets. The original method of removing these just, well, removed them and the corresponding years. This meant that the data series was no longer consecutive and may have affected the site results. The sites affected are:
+
 * Lahav
 * Matta
 * Prades
@@ -36,12 +37,12 @@ More incoherent ramblings are saved in a LaTeX document on Overleaf - this file 
 
 ### P-ANPP SAM Modelling of Sites
 
-The first step was to model the 10 sites from Paschalis et al (2020) using the SAM approach with precipitation (P) as the only driver. The key result from this is that only two sites indicate a significant response of ANPP to antecedent P, as per the below figure
+The first step was to model the 10 sites from Paschalis et al (2020) using the SAM approach with precipitation (P) as the only driver. The key result from this is that only one sites indicate a significant response of ANPP to antecedent P, as per the below figure
 
 ![](Plots/P_3_Alphas.png)
 
 
-The monthly weights for these two sites offer no immediate information about which lags are most important - although Konza has more noticeable spikes than Lahav.
+This is Konza 
 
 
 ![](Plots/P_3_SigWeights.png)
@@ -124,6 +125,6 @@ We want to determine why each model suggests that ANPP is related to P. It might
 
 I have written a script which runs SAM for every consecutive run of 10 years at Konza. Note the script takes any site, model, or sample length. I used Konza and observations as this is the longest dataset.
 
-![](Plots/KonzaSampleAlphas.png)
+![](Plots/KonzaSampleAlphas_10.png)
 
 This is very interesting. There is a period of time 1987-2000 which exhibits significance on P while nowhere else does. I need to look at these dates and see if there is anything different compared to the years that don't produce significance.
