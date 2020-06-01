@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## ISSUE - 27/05/2020
+# ISSUE - 27/05/2020
 
 Some of the sites had missing ANPP data in the middle of their datasets. The original method of removing these just, well, removed them and the corresponding years. This meant that the data series was no longer consecutive and may have affected the site results. The sites affected are:
 
@@ -42,12 +42,13 @@ The first step was to model the 10 sites from Paschalis et al (2020) using the S
 ![](Plots/P_3_Alphas.png)
 
 
-This is Konza 
+This is Konza. As can be seen from the weights, the current year exerts the most influence, with July/May/March having the highest weighting. 
 
 
 ![](Plots/P_3_SigWeights.png)
 
-I have run the SAM script for 1, 2, 4 and 5 year lags as well. An interesting result is that antecedent rainfall at Lahav is NOT SIGNIFICANT at these lag lengths - this to me implies an issue. If a 3 year lag is significant, the method should result in a 5 year lag ALSO being significant - if years 4 and 5 have no impact then their weights should just be small relative to the significant years.
+I have run the SAM script for 1, 2, 4 and 5 year lags as well. An interesting result is that the significance of antecedent rainfall depends heavily on the length of lag considered and not in an ideal mannner. For instance $P_{ant}$ is only significant at Brandbjerg for a lag of 2 years. 
+Ideally I believe a method where, if lag 2 is significant, then lag 3,4,5 will be as well because it is possible for the monthly weights to capture this. 
 
 | | |
 |:-:|:-:|
@@ -56,8 +57,9 @@ I have run the SAM script for 1, 2, 4 and 5 year lags as well. An interesting re
 |4 Year|5 Year|
 |<img src="Plots/P_4_Alphas.png" width="300" height="200">|<img src="Plots/P_5_Alphas.png" width="300" height="200">|
 
+The extreme influence of the choice of Nlag (looking back Nlag-1 years) is disconcerting.
 
-
+### Added Temperature
 
 I have added temperature to the model - it is in exactly the same form as the antecedent precipitation. This is currently using mean monthly temperature which I believe will "smooth" the input too much and make it difficult to distinguish any dependence. 
 
@@ -78,7 +80,7 @@ In the below plots, diamonds (on the left) are the P covariate and circles (on t
 
 I see the below issues:
 
-  * Similarly to the P model, site covariates lose significance when longer lags are explored. This is not ideal behaviour in the model.
+  * Similarly to the P model, site covariates lose significance when longer lags are explored - see Stubai, Nlag = 1. This is not ideal behaviour in the model.
   * Sites report differing significance of the P covariate between the P and PT models. What does this mean in terms of the site's dependence on antecedent P?
   
 ## Model Comparison
@@ -97,22 +99,34 @@ Thoughts:
 * Martin pointed out that Prades has 13 years of data but no lagged P response. 
 * Lack of temperature dependence is likely due to use of mean monthly temperatures.
 
-#### SGS
+### SGS
 
 We now focus on SGS, in particular the antecedent P term, and look into the differences between the models. SGS is a grassland site with low MAT (8.5C) and low rainfall (300mm). These are both the 2nd lowest of all sites. Coefficient of variation for precipitation is high however at 0.4, the highest of all sites.
 
-The site is likely temperature and water limited. As such, when the precipitation falls is probably quite important. 
+The site is likely temperature and water limited. As such, when in the year the precipitation falls is probably quite important. 
 
 
 ![](Plots/SGSModelPWeights.png)
 
 No models show any real long-term seasonal lags with weights in years 1 and 2 being largely uniform. The lags are noticeably more heavily weighted to year 0 in DLEM, LPX and TC. However, observations of ANPP and P at SGS show no correlation. *How accurately do these models capture the behaviour at SGS?*
 
+Another interesting feature is that the cumulative P weights for the models reach 90% (as used by Kiona to define the length of the lag) at 33, 31, 33 and 33 months respectively. The prior for the site reaches 90% at month 33, and so there is no real difference here.  
+
+| MODEL | Year 0 Weight | Year -1 Weight | Year -2 Weight | Months to 90% Weight |
+|:-:|:-:|:-:|:-:|:-:|
+| DLEM | 0.403 | 0.262 | 0.335 | 33 |
+| LPX | 0.484 | 0.342 | 0.174 | 31 |
+| TC | 0.472 | 0.303 | 0.225 | 33 |
+| TECO | 0.271 | 0.357 | 0.372 | 33 |
+| Prior | 0.273 | 0.364 | 0.363 | 33 |
+
+### LAI Checks
+
 Martin suggested that the difference between models might be due to LAI differences.
 
 ![](Plots/SGSLAI.png)
 
-The models however have totally different LAI profiles. Martin suggests that looking into GPP might give further insight. The below equation is ANPP but I should remember that allocation to roots is another component of total GPP:
+The models however have totally different LAI profiles and highest monthly weights don't correspond with any obvious peaks in LAI. Martin suggests that looking into GPP might give further insight. The below equation is ANPP but I should remember that allocation to roots is another component of total GPP:
 
 $ANPP = GPP_{leaf} + GPP_{stem} - R_{A}$
 
@@ -123,7 +137,7 @@ We want to determine why each model suggests that ANPP is related to P. It might
 
 ## Testing sampled Konza data
 
-I have written a script which runs SAM for every consecutive run of 10 years at Konza. Note the script takes any site, model, or sample length. I used Konza and observations as this is the longest dataset.
+I have written a script which runs SAM with Nlag = 3 for every consecutive run of 10 years at Konza. Note the script takes any site, model, or sample length. I used Konza and observations as this is the longest dataset.
 
 ![](Plots/KonzaSampleAlphas_10.png)
 
