@@ -875,9 +875,23 @@ Nlag = 3
 SampleLength = 10
 Site = "Konza"
 Model = "Obs"
+block = timeblocks(1,(Nlag>1)*1,(Nlag>2)*(Nlag-2),0,0)$block
 SampleSAM(Site,Model,Nlag,SampleLength)
 
 # Plot the alphas
   output = SampleAlphaPlotFunction(Site,SampleLength)
   grid.arrange(output$alphaPlot)
 
+# Lets explore the significant results and see how they differ
+# Find the significant years
+SigSamples = substr(as.vector(unique(output$alphas$ID[output$alphas$Significant==1])),start=1,stop=4)
+
+# Find the alpha values
+SampleAlphas = data.frame("Year" = SigSamples,"Palpha"=0)
+
+for (Start in SigSamples){
+  name = paste0(Site,"_PT_",Start,"_",SampleLength,"SL_Obs_pos_",Nlag,"_",max(block))
+  load(paste0(name,".Rdata"))
+  data = eval(as.name(name))
+  SampleAlphas$Palpha[SampleAlphas$Year==Start] = data$alphas$mean[2]
+}
