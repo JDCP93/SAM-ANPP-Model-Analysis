@@ -17,7 +17,7 @@ graphics.off()
 
 # Source the custom functions
 source("SampleSAM_P.R")
-source("SampleSAMFunction_P.R")
+source("SampleFunction_P.R")
 source("SAMFunction_P.R")
 
 # Source required packages
@@ -27,9 +27,6 @@ library(dplyr)
 
 # Set up Konza
 Site = "Konza"
-load(paste0(Site,"_DailyData.Rdata"))
-load(paste0(Site,"_MonthlyData.Rdata"))
-load(paste0(Site,"_YearlyData.Rdata"))
 
 #*******************************************************************************
 # Initial Test
@@ -39,3 +36,7 @@ load(paste0(Site,"_YearlyData.Rdata"))
 
 Nlag = 1
 block = timeblocks(0,0,0,0,Nlag)$block
+SampleLength = 10
+
+SampleFunction_P(Site,"Obs",block,Nlag,SampleLength)
+
