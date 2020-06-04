@@ -25,7 +25,7 @@ source("ReorderSAMFunction_PT.R")
 source("ReorderRunSAM.R")
 source("ReorderAlphaPlot.R")
 source("ReorderSAMPlot_PT.R")
-source("SampleSAM.R")
+source("SampleSAM_PT.R")
 source("SampleSAMFunction_PT.R")
 source("SampleAlphaPlot.R")
 
@@ -876,7 +876,7 @@ SampleLength = 10
 Site = "Konza"
 Model = "Obs"
 block = timeblocks(1,(Nlag>1)*1,(Nlag>2)*(Nlag-2),0,0)$block
-SampleSAM(Site,Model,Nlag,SampleLength)
+SampleSAM_PT(Site,Model,Nlag,SampleLength)
 
 # Plot the alphas
   output = SampleAlphaPlotFunction(Site,SampleLength)

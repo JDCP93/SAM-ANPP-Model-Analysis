@@ -1,4 +1,4 @@
-SampleSAM = function(Site,Model="Obs",Nlag=3,SampleLength){
+SampleSAM_PT = function(Site,Model="Obs",Nlag=3,SampleLength){
 
   # Load the time series
   load(paste0(Site,"_DailyData.Rdata"))
