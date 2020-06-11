@@ -1,8 +1,8 @@
 ---
 title: "Overview"
 author: "Jon Page"
-date: "24/05/2020"
-output: html_document
+date: "11/06/2020"
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -35,25 +35,34 @@ The model was first run without the Tair term. This was then added in to assess 
 
 ### Question 1: Assessing Significance of $\alpha_{k}$
 
-For the sites from Paschalis et al (2020), the below plot is for $\alpha_{1}$ for the model without Tair. The dot is the mean of the posterior distribution for $\alpha_{1}$ and the error bars cover the 95% CI. These are red if the CI does not overlap 0.
+For the sites from Paschalis et al (2020), Figure 1 is of the $\alpha_{1}$ term for the model without Tair. The dot is the mean of the posterior distribution for $\alpha_{1}$ and the error bars cover the 95% CI. These are red if the CI does not overlap 0.
 
-![](plots/P_3_Alphas.png)
 
-If antecedent rainfall is now calculated over 4 years (with 4 unqiue weights for year 3), we get the below plot.
+```{r, echo=FALSE, fig.align='center', fig.cap='Covariate terms for 1 year lag (years 0 and -1)', out.width='50%'}
+knitr::include_graphics('plots/P_2_Alphas.png')
+```
 
-![](plots/P_4_Alphas.png)
+
+If antecedent rainfall is now calculated over 3 years (with 4 unqiue weights for year 2), we get Figure 2.
+
+```{r , echo=FALSE, fig.align='center', fig.cap='Covariate terms for 2 year lag (years 0, -1 and -2)', out.width='50%'}
+knitr::include_graphics('plots/P_3_Alphas.png')
+```
 
 I have two questions arising from this result:
 
 * Is the following statement correct: If $\alpha_{k}$ is significantly different from 0, antecedent rainfall/temperature is a driver of productivity, with importance derived from the monthly weights. If $\alpha_{k}$ is NOT significantly different from 0, the monthly weights have no real meaning.
 
-* When considering a lag of 3 years as opposed to a lag of 2 years, antecedent rainfall at Lahav is no longer significantly different from zero. This has implications in terms of the choice of lag length - using a longer lag can mask what appears to be possible antecedent effects. Is this behaviour desirable? I believe this occurs is due to the Dirichlet prior assigning equal prior to all weights. Is there a way of maintaining significance at earlier lags with a different prior assigning higher weights to more recent months? 
+* When considering a lag of 2 years as opposed to a lag of 1 year, antecedent rainfall is no longer significantly different from zero at multiple sites. This has implications in terms of the choice of lag length - using a longer lag can mask what appears to be possible antecedent effects. Is this behaviour desirable? I believe this occurs due to the Dirichlet prior assigning equal prior weighting to all months. Is there a way of maintaining significance at earlier lags with a different prior assigning higher weights to more recent months or assuming a weight of zero outside of the first year, etc.? 
 
 ### Question 2: Understanding monthly weights
 
-Below is a plot of monthly weights for antecedent precipitation for one site (Shortgrass Steppe). Each plot used ANPP data from various models in the SAM approach and all were found to have an $\alpha_{2}$ that was significantly different from 0.
+Figure 3 is a plot of monthly weights for antecedent precipitation for one site (Shortgrass Steppe). Each plot used ANPP data from various models in the SAM approach and all were found to have an $\alpha_{2}$ that was significantly different from 0.
 
-![](plots/SGSModelPWeights.png)
+
+```{r , echo=FALSE, fig.align='center', fig.cap='SGS site weights for various models', out.width='70%'}
+knitr::include_graphics('plots/SGSModelPWeights.png')
+```
 
 I have the following questions:
 
@@ -63,12 +72,15 @@ I have the following questions:
 
 ### Question 3: The length of data series
 
-The below is a plot of $\alpha_{2}$ and $\alpha_{3}$ for the sites using observed ANPP as well as each of 5 models. The plots are ordered by length of data available and there is a clear correlation between this and the significance of the $\alpha_{k}$. Red indicates significantly different from 0. Covariate values are normalised about their mean to allow plotting on the same scale.
+Figure 4 is a plot of $\alpha_{2}$ and $\alpha_{3}$ for the sites using observed ANPP as well as each of 5 models. The plots are ordered by length of data available and there is a clear correlation between this and the significance of the $\alpha_{k}$. Red indicates significantly different from 0. Covariate values are normalised about their mean to allow plotting on the same scale.
 
-![](plots/ModelAlphas.png)
+```{r , echo=FALSE, fig.align='center', fig.cap='Covariates for each model at every site', out.width='70%'}
+knitr::include_graphics('plots/ModelAlphas.png')
+```
+
 The following question has arisen from this plot:
 
-* Do you have any guidance regarding the length of data set necessary, given the number of parameters being estimated in SAM? The model used here is simple and ideally I would have more processes represented. Additionally, many flux data sets are shorter than 10 years which appears to the approximate cut off for significance here.
+* Do you have any guidance regarding the length of data set necessary, given the number of parameters being estimated in SAM? The model used here is simple and ideally I would have more processes represented. Additionally, many flux data sets are shorter than 10 years which appears to be the approximate cut off for significance here.
 * The model in Ogle et al (2015) as well as other SAM papers (e.g. Ryan et al, 2017) explicitly account for the current year in the variables while also including them within the antecedent term (e.g. the equivalent in my current model would be $\mu[i] = \alpha_{1} + \alpha_{2}*PPT[i] + \alpha_{3}*PPT_{ant}[i] + \alpha_{4}*Tair[i] + \alpha_{5}*Tair_{ant}[i]$). Why is this necessary when the current year's weather is included in the antecedent term with individual weights giving lots of freedom to assigning importance to these measurements?
 
 
