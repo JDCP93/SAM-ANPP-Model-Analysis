@@ -26,8 +26,37 @@ FluxNetProcess = function(Site){
   #  OUTPUTS:
   #  -
 
-File = paste0(Site,"/FLX_",Site,"_FLUXNET2015_FULLSET_DD_2004-2014_1-4.csv")
-CSV = (read.csv(File,header=TRUE))
-
-CSV$TIMESTAMP = as.Date(as.character(CSV$TIMESTAMP),"%Y%m%d")
-
+  # Look in folder "Site" for the daily FullSet data
+  File = list.files(Site, pattern = "*FULLSET_DD*")
+  # Read the data into R 
+  CSV = (read.csv(paste0(Site,"/",File),header=TRUE))
+  # Change timestamps into dates
+  CSV$TIMESTAMP = as.Date(as.character(CSV$TIMESTAMP),"%Y%m%d")
+  # List the variables we want to extract as well as their quality control
+  Variables = c("TIMESTAMP",
+                "NEE_VUT_REF","NEE_VUT_REF_QC",
+                "SW_IN_F","SW_IN_F_QC",
+                "TA_F","TA_F_QC",
+                "VPD_F","VPD_F_QC",
+                "SWC_F_MDS_1","SWC_F_MDS_1_QC",
+                "P_F","P_F_QC")
+  # Extract the variables we require
+  Data = CSV[Variables]
+  
+  # Check the quality of the data
+  # Since all data is daily, _QC variables are percentage of measured/good 
+  # quality gapfill data, ranging from 0-1 
+  
+  # Identify QC columns
+  QCcols = grep("QC",colnames(Data))
+  # Remove first row if any data is poor - repeat as necessary
+  while(any(Data[1,QCcols]==0)){
+    Data = Data[-1,]
+  }
+  # Remove last row if any data is poor - repeat as necessary
+  while(any(Data[nrow(Data),QCcols]==0)){
+    Data = Data[-nrow(Data),]
+  }
+  
+  
+}

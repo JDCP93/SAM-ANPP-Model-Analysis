@@ -17,7 +17,7 @@ Let's activate!
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Wkg
+## Working on Walnut Gulch
 
 I will first attempt to replicate the modelling at one site, Walnut Gulch (FluxNet SiteID US_Wkg).
 
@@ -32,5 +32,6 @@ I need to access the full fluxnet data for this, as the data I have from previou
 if (file.exists(paste0(Site,"_DailyData.Rdata"))){
   print(paste0("Gosh! Processed daily FluxNet data already exists for ",Site))
 } else {
+  source("FluxNetProcess.R")
   FluxNetProcess(Site)
 }
