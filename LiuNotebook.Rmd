@@ -1,0 +1,17 @@
+---
+title: "Replicating Liu et al"
+output: html_notebook
+---
+
+This notebook is to document my replication of Liu et al's model from their 2019 paper.
+
+I have downloaded the model code from github (https://github.com/yliu11/NEE_Bayes_model, accessed 15/06/20).
+
+I need to coerce data into the required input formats and produce a wrapper script.
+
+## Wkg
+
+I will first attempt to replicate the modelling at one site, Walnut Gulch - US_Wkg.
+
+I need to access the full fluxnet data for this, as the data I have from previous modelling of this site does not include SWC. I need daily FluxNet data
+
