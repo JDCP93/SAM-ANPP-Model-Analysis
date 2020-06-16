@@ -19,3 +19,4 @@ BadNaNOutputs/
 Plots/NaNIssues/
 desktop.ini
 .DS_Store
+*.html
