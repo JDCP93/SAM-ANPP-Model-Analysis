@@ -67,8 +67,19 @@ FluxNetProcess = function(Site){
   PercentQC = QC*100/nrow(Data)
   # If more than 5% of the dat is poor, print a warning
   if (PercentQC > 5){
-    print(paste0("Warning! ",
+    message("Warning! ",
                  round(PercentQC,digits=3),
-                 "% of data is poor!"))
+                 "% of data is poor!")
+  }
+  # Check for excessive consecutive streaks of poor data
+  # Find the sequences of poor/good data
+  Seq = rle(apply(Data[,QCcols],MARGIN=1,function(x) any(x < 0.75)))
+  # Find the lengths of these sequences for the poor data
+  Lengths = Seq$lengths[Seq$values==TRUE]
+  # If a run of 5 or more days of poor data exists, print a warning
+  if (max(Lengths)>=5){
+    message("Warning! There is a run of ",
+                 max(Lengths),
+                 " consecutive days with poor data!")
   }
 }

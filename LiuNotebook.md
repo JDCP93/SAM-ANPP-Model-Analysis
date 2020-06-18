@@ -31,3 +31,5 @@ if (file.exists(paste0(Site,"_DailyData.Rdata"))){
   FluxNetProcess(Site)
 }
 ```
+
+    ## Warning! There is a run of 7 consecutive days with poor data!
