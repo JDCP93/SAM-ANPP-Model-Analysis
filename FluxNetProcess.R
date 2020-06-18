@@ -27,7 +27,7 @@ FluxNetProcess = function(Site){
   #  -
 
   # Look in folder "Site" for the daily FullSet data
-  File = list.files(Site, pattern = "*FULLSET_DD*")
+  File = list.files(Site, pattern = "*SUBSET_DD*")
   # Read the data into R 
   CSV = (read.csv(paste0(Site,"/",File),header=TRUE))
   # Change timestamps into dates
@@ -58,5 +58,17 @@ FluxNetProcess = function(Site){
     Data = Data[-nrow(Data),]
   }
   
-  
+  # Perform a check on the amount of poor data remaining
+  # Arbitarily decide that less than 75% measured/good data for a day is 
+  # worrying
+  # If any QC columns are < 0.75 for a row, count the row as poor data
+  QC = sum(apply(Data[,QCcols],MARGIN=1,function(x) any(x < 0.75)))
+  # Calculate percentage of remaining data that is poor
+  PercentQC = QC*100/nrow(Data)
+  # If more than 5% of the dat is poor, print a warning
+  if (PercentQC > 5){
+    print(paste0("Warning! ",
+                 round(PercentQC,digits=3),
+                 "% of data is poor!"))
+  }
 }
