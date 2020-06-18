@@ -120,4 +120,6 @@ FluxNetProcess = function(Site){
   
   # Create the NEE vector
   NEE = Data$NEE_VUT_REF
+  
+  ##### NEXT NDVI AND PPT ##### 
 }
