@@ -2,7 +2,8 @@
 title: "Replicating Liu et al"
 author: "Jon Page"
 date: "16/06/2020"
-output: html_notebook
+Last Updated: date()
+output: github_document
 ---
 
 This notebook is to document my replication of Liu et al's model from their 2019 paper.
@@ -15,6 +16,7 @@ Let's activate!
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+rm(list=ls())
 ```
 
 ## Working on Walnut Gulch
@@ -35,3 +37,5 @@ if (file.exists(paste0(Site,"_DailyData.Rdata"))){
   source("FluxNetProcess.R")
   FluxNetProcess(Site)
 }
+```
+
