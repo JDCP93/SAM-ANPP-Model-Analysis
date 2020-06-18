@@ -86,7 +86,7 @@ FluxNetProcess = function(Site){
   }
   
   # ############################################################################
-  # Create matrices required for modelling
+  # Create inputs required for modelling
   # ############################################################################
   
   # First, create the fixed parameters:
@@ -108,6 +108,16 @@ FluxNetProcess = function(Site){
   # Indices of days that can be modelled
   Mem_records = 366:nrow(Data)
   
-  # 
+  # Create the climate predictor matrix
+  # See Model_Liu inputs for correct order
+  # SWC is repeated to account for current and antecedent.
+  clim = matrix(c(Data$TA_F,
+                  Data$SW_IN_F,
+                  Data$VPD_F,
+                  Data$SWC_F_MDS_1,
+                  Data$SWC_F_MDS_1),
+                ncol = Nv)
   
+  # Create the NEE vector
+  NEE = Data$NEE_VUT_REF
 }
