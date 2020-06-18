@@ -26,6 +26,7 @@ FluxNetProcess = function(Site){
   #  OUTPUTS:
   #  -
 
+  # Load in the FluxNet data we need:
   # Look in folder "Site" for the daily FullSet data
   File = list.files(Site, pattern = "*SUBSET_DD*")
   # Read the data into R 
@@ -43,7 +44,7 @@ FluxNetProcess = function(Site){
   # Extract the variables we require
   Data = CSV[Variables]
   
-  # Check the quality of the data
+  # Check the quality of the data:
   # Since all data is daily, _QC variables are percentage of measured/good 
   # quality gapfill data, ranging from 0-1 
   
@@ -58,7 +59,8 @@ FluxNetProcess = function(Site){
     Data = Data[-nrow(Data),]
   }
   
-  # Perform a check on the amount of poor data remaining
+  # Perform checks on the amount of poor data remaining:
+  
   # Arbitarily decide that less than 75% measured/good data for a day is 
   # worrying
   # If any QC columns are < 0.75 for a row, count the row as poor data
@@ -82,4 +84,30 @@ FluxNetProcess = function(Site){
                  max(Lengths),
                  " consecutive days with poor data!")
   }
+  
+  # ############################################################################
+  # Create matrices required for modelling
+  # ############################################################################
+  
+  # First, create the fixed parameters:
+  
+  # Number of short-term climatic predictors
+  # Tave, SW, VPD, SWCcurrent and antSWC
+  Nv = 5
+  # Days into past considered for short-term predictors
+  Nlag = 14
+  # Time lag for precipitation (number of different time periods)
+  NlagP = 8
+  # Total number of climate covariates (see paper for info)
+  Ns = 22
+  
+  # Calculate other parameters:
+  
+  # Number of days that antecedent conditions can be calculated for
+  Nmem = nrow(Data)-365
+  # Indices of days that can be modelled
+  Mem_records = 366:nrow(Data)
+  
+  # 
+  
 }
