@@ -39,3 +39,7 @@ if (file.exists(paste0(Site,"_DailyData.Rdata"))){
 }
 ```
 
+TO DO: 
+
+* Description for NDVIProcess
+* Add NDVIProcess to FluxNetProcess (with check for file)        

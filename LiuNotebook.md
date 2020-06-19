@@ -33,3 +33,8 @@ if (file.exists(paste0(Site,"_DailyData.Rdata"))){
 ```
 
     ## Warning! There is a run of 7 consecutive days with poor data!
+
+TO DO:
+
+  - Description for NDVIProcess
+  - Add NDVIProcess to FluxNetProcess (with check for file)
