@@ -12,7 +12,8 @@ NDVIProcess = function(Site){
   # Remove any levels from the values
   Sitelat = as.numeric(as.character(Sitelat))
   Sitelon = as.numeric(as.character(Sitelon))
-
+  # Delete site info csv
+  rm("AllInfo")
   # Create NDVI vector
   
   # Source required package
@@ -27,6 +28,9 @@ NDVIProcess = function(Site){
     rawNDVI = ncvar_get(cdf,"ndvi")
     NDVIlat = ncvar_get(cdf,"lat")
     NDVIlon = ncvar_get(cdf,"lon")
+    # Close the netcdf connection
+    nc_close(cdf)
+    rm("cdf")
     # Calculate the location of the site
     latIndex = which.min(abs(NDVIlat - Sitelat))
     lonIndex = which.min(abs(NDVIlon + Sitelon))
@@ -40,4 +44,9 @@ NDVIProcess = function(Site){
     # Add to NDVI dataframe
     NDVI = rbind(NDVI,NewData)
   }
+  
+  # Assign a unique name and save the output
+  name = paste0(Site,"_NDVI")  
+  assign(name,NDVI)
+  save(list=c(name),file=paste0(name,".Rdata"))
 }
