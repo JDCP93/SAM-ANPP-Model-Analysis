@@ -9,6 +9,9 @@ NDVIProcess = function(Site){
   # for the site, as well as the required NDVI files. These can be downloaded 
   # directly via R by use of the package 'gimms' if they are not available. The
   # NDVI files must be saved in a subfolder named 'NDVI'.
+  # 
+  # The FluxNet file is from https://fluxnet.fluxdata.org/data/download-data/, 
+  # obtained by selecting to download the BADM file.
   #
   # ############################################################################
   # Function inputs and outputs
