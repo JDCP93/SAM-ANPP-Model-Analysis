@@ -1,5 +1,26 @@
 NDVIProcess = function(Site){
-
+  
+  # A function to create the NDVI vector required to run Model_Liu. The function
+  # takes the raw NDVI data downloaded from the internet as a csv, and extracts
+  # a timeseries of NDVI for the location of the given site.
+  # 
+  # The function assumes the existence of a csv containing site info for the 
+  # FluxNet sites so that it can obtain the required latitude and longitude values
+  # for the site, as well as the required NDVI files. These can be downloaded 
+  # directly via R by use of the package 'gimms' if they are not available. The
+  # NDVI files must be saved in a subfolder named 'NDVI'.
+  #
+  # ############################################################################
+  # Function inputs and outputs
+  # ############################################################################
+  #
+  # INPUTS:
+  #  - Site: A character vector with the FluxNet siteID
+  #  
+  #  OUTPUTS:
+  #  - "Site"_NDVI.Rdata: An Rdata file named after the site which contains a
+  #                       vector with the same name consisting of the numeric
+  #                       NDVI values for the site
 
 
   # First find site longitude and latitude from the site info csv
