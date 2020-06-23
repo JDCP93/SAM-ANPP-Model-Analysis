@@ -121,5 +121,23 @@ FluxNetProcess = function(Site){
   # Create the NEE vector
   NEE = Data$NEE_VUT_REF
   
-  ##### NEXT NDVI AND PPT ##### 
+  # Source the NDVI processing function
+  source("NDVIProcess.R")
+  # Extract raw NDVI
+  NDVI = NDVIProcess(Site)
+  # Source the NDVI indexing function
+  source("NDVIIndexProcess.R")
+  # Calculate the NDVI indices
+  NDVI_Index = NDVIIndexProcess(NDVI)
+  # Trim the NDVI indices to the dates from the FluxNet data
+  NDVI_Index = NDVI_Index[NDVI_Index$Date %in% Data$TIMESTAMP,]
+  # Trim the start of the NDVI data to match these indices
+  NDVI = NDVI[-(1:NDVI_Index$Index[1]),]
+  # Relabel indices to begin at 1
+  NDVI_Index$Index = NDVI_Index$Index-NDVI_Index$Index[1]+1
+  # Trim the end of the NDVI data to match these indices
+  NDVI = NDVI[-((NDVI_Index$Index[nrow(NDVI_Index)]+1):nrow(NDVI)),]
+
+  
+  # CURRENT ISSUE - NDVI data extends past FluxNet...
 }
