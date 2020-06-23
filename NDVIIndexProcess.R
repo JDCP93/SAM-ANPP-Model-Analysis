@@ -25,19 +25,9 @@ NDVIIndexProcess = function(NDVI){
   NDVI_Index = data.frame("Date" = seq(StartDate,EndDate,by="day"),
                           "Index" = NDVIIndices)
 
-
-
 }
 
 
-  # Trim the NDVI indices to the dates from the FluxNet data
-  NDVI_Index = NDVI_Index[NDVI_Index$Date %in% Data$TIMESTAMP,]
-  # Trim NDVI data to match these indices
-  NDVI = NDVI[-(1:NDVI_Index$Index[1]),]
-  # Relabel indices to begin at 1
-  NDVI_Index$Index = NDVI_Index$Index-NDVI_Index$Index[1]+1
-  
-  
-  # CURRENT ISSUE - NDVI data extends past FluxNet...
+
 
   

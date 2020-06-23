@@ -68,9 +68,5 @@ NDVIProcess = function(Site){
     # Add to NDVI dataframe
     NDVI = rbind(NDVI,NewData)
   }
-  
-  # Assign a unique name and save the output
-  name = paste0(Site,"_NDVI")  
-  assign(name,NDVI)
-  save(list=c(name),file=paste0(name,".Rdata"))
+  return(NDVI)
 }
