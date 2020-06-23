@@ -31,8 +31,8 @@ NDVIProcess = function(Site){
   # Load site info csv
   AllInfo = read.csv("FLX_AA-Flx_BIF_DD_20200501.csv")
   # Extract latitude and longitude
-  Sitelat = filter(AllInfo, SITE_ID == Site & VARIABLE == "LOCATION_LAT")$DATAVALUE
-  Sitelon = filter(AllInfo, SITE_ID == Site & VARIABLE == "LOCATION_LONG")$DATAVALUE
+  Sitelat = AllInfo$DATAVALUE[AllInfo$SITE_ID == Site & AllInfo$VARIABLE == "LOCATION_LAT"]
+  Sitelon = AllInfo$DATAVALUE[AllInfo$SITE_ID == Site & AllInfo$VARIABLE == "LOCATION_LONG"]
   # Remove any levels from the values
   Sitelat = as.numeric(as.character(Sitelat))
   Sitelon = as.numeric(as.character(Sitelon))
