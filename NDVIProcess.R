@@ -21,9 +21,8 @@ NDVIProcess = function(Site){
   #  - Site: A character vector with the FluxNet siteID
   #  
   #  OUTPUTS:
-  #  - "Site"_NDVI.Rdata: An Rdata file named after the site which contains a
-  #                       vector with the same name consisting of the numeric
-  #                       NDVI values for the site
+  #  - NDVI: A dataframe consisting of the numeric NDVI values for the site as 
+  #          well as year and monthspan
 
 
   # First find site longitude and latitude from the site info csv
