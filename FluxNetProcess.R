@@ -121,6 +121,8 @@ FluxNetProcess = function(Site){
   # Create the NEE vector
   NEE = Data$NEE_VUT_REF
   
+  ## NDVI
+  
   # Source the NDVI processing function
   source("NDVIProcess.R")
   # Extract raw NDVI
@@ -137,7 +139,6 @@ FluxNetProcess = function(Site){
   NDVI_Index$Index = NDVI_Index$Index-NDVI_Index$Index[1]+1
   # Trim the end of the NDVI data to match these indices
   NDVI = NDVI[-((NDVI_Index$Index[nrow(NDVI_Index)]+1):nrow(NDVI)),]
-
   
-  # CURRENT ISSUE - NDVI data extends past FluxNet...
+  ## PPT - Awaiting response from Yao Liu
 }
