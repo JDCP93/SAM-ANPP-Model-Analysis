@@ -115,7 +115,7 @@ model{
   #   iii) bi-monthly scale, starting 2 months previously and up to 5 months previously (i = 5 and 6), 
   #   iv) seasonal scale, starting 6 months previous and over the past year (i = 7 and 8). 
   for(i in 1:NlagP){
-    deltaAP[i] <- (i>1)*deltaXAP[d] + (i==1)*0  
+    deltaAP[i] <- (i>1)*deltaXAP[i] + (i==1)*0  
     weightAP[i] <- deltaAP[i]/sum(deltaAP[])
     # Compute the cumulative weights:
     cum_weightAP[i] <- sum(weightAP[1:i])
