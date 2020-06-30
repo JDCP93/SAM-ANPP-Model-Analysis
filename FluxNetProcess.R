@@ -139,6 +139,10 @@ FluxNetProcess = function(Site){
   NDVI_Index$Index = NDVI_Index$Index-NDVI_Index$Index[1]+1
   # Trim the end of the NDVI data to match these indices
   NDVI = NDVI[-((NDVI_Index$Index[nrow(NDVI_Index)]+1):nrow(NDVI)),]
+  # Extract just the NDVI values 
+  NDVI = NDVI[,3]
   
   ## PPT - Awaiting response from Yao Liu
+  
+  
 }
