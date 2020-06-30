@@ -31,7 +31,7 @@ model{
   # Likelihood and mean model, looping over daily NEE records at this site (starting at 366 days into the record)
   for(r in 1:Nmem){ # r is the t in the supplemental material model description
     # Likelihood for daily NEE data:
-    NEE[Mem_records[r]] ~ ddexp(mu[r], tau_y)
+    NEE[Mem_records[r]] ~ ddexp(muNEE[r], tau_y)
     # Replicated data for evaluating model fit:
     NEE_pred[r] ~ ddexp(muNEE[r], tau_y)
     # Mean model: summing the effectClim (climate effects multiplied by the associated current 
