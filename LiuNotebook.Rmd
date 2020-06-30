@@ -30,16 +30,12 @@ Site = "US-Wkg"
 I need to access the full fluxnet data for this, as the data I have from previous modelling of this site does not include SWC. Daily FluxNet data will be used.
 
 
-```{r Daily Data}
-if (file.exists(paste0(Site,"_DailyData.Rdata"))){
-  print(paste0("Gosh! Processed daily FluxNet data already exists for ",Site))
+```{r Liu Input Data}
+if (file.exists(paste0(Site,"_LiuInput.Rdata"))){
+  message("Gosh! Processed daily FluxNet data already exists for ",Site)
 } else {
   source("FluxNetProcess.R")
   FluxNetProcess(Site)
 }
 ```
 
-TO DO: 
-
-* Description for NDVIProcess
-* Add NDVIProcess to FluxNetProcess (with check for file)        

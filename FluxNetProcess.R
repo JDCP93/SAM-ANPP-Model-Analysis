@@ -130,19 +130,43 @@ FluxNetProcess = function(Site){
   # Source the NDVI indexing function
   source("NDVIIndexProcess.R")
   # Calculate the NDVI indices
-  NDVI_Index = NDVIIndexProcess(NDVI)
+  NDVI_index = NDVIIndexProcess(NDVI)
   # Trim the NDVI indices to the dates from the FluxNet data
-  NDVI_Index = NDVI_Index[NDVI_Index$Date %in% Data$TIMESTAMP,]
+  NDVI_index = NDVI_index[NDVI_index$Date %in% Data$TIMESTAMP,]
   # Trim the start of the NDVI data to match these indices
-  NDVI = NDVI[-(1:NDVI_Index$Index[1]),]
+  NDVI = NDVI[-(1:NDVI_index$Index[1]),]
   # Relabel indices to begin at 1
-  NDVI_Index$Index = NDVI_Index$Index-NDVI_Index$Index[1]+1
+  NDVI_index$Index = NDVI_index$Index-NDVI_index$Index[1]+1
   # Trim the end of the NDVI data to match these indices
-  NDVI = NDVI[-((NDVI_Index$Index[nrow(NDVI_Index)]+1):nrow(NDVI)),]
+  NDVI = NDVI[-((NDVI_index$Index[nrow(NDVI_index)]+1):nrow(NDVI)),]
   # Extract just the NDVI values 
   NDVI = NDVI[,3]
   
-  ## PPT - Awaiting response from Yao Liu
+  ## PPT
   
+  # Source the ppt processing function
+  source("PPTProcess.R")
+  # Extract the ppt matrix
+  ppt_multiscale = PPTProcess(Data)
+  
+  
+  # ############################################################################
+  # Create output list
+  # ############################################################################
+  
+  output = list("Nv"=Nv,
+                "Ns"=Ns,
+                "Nlag"=Nlag,
+                "Nmem"=Nmem,
+                "NlagP"=NlagP,
+                "Mem_records"=Mem_records,
+                "clim"=clim,
+                "ppt_multiscale"=ppt_multiscale,
+                "NEE"=NEE,
+                "NDVI"=NDVI,
+                "NDVI_index"=NDVI_index)
+  name = paste0(Site,"_LiuInput")
+  assign(name,output)
+  save(list=c(name),file=paste0(name,".Rdata"))
   
 }
