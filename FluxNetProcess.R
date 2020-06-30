@@ -141,6 +141,8 @@ FluxNetProcess = function(Site){
   NDVI = NDVI[-((NDVI_index$Index[nrow(NDVI_index)]+1):nrow(NDVI)),]
   # Extract just the NDVI values 
   NDVI = NDVI[,3]
+  # Extract just the NDVI index values
+  NDVI_index = NDVI_index[,2]
   
   ## PPT
   
@@ -164,7 +166,7 @@ FluxNetProcess = function(Site){
                 "ppt_multiscale"=ppt_multiscale,
                 "NEE"=NEE,
                 "NDVI"=NDVI,
-                "NDVI_index"=NDVI_index)
+                "NDVI_index"=as.matrix(NDVI_index))
   name = paste0(Site,"_LiuInput")
   assign(name,output)
   save(list=c(name),file=paste0(name,".Rdata"))

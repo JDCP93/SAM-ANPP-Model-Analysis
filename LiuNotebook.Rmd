@@ -39,3 +39,35 @@ if (file.exists(paste0(Site,"_LiuInput.Rdata"))){
 }
 ```
 
+We have extracted the necessary data from the FluxNet and NDVI files. We can now run the model:
+
+```{r Run Model}
+
+library(R2jags)
+
+# Load the input data
+load(paste0(Site,"_LiuInput.Rdata"))
+# Assign to standard name
+Data = eval(as.name(paste0(Site,"_LiuInput")))
+
+   # Define the parameters for the model operation
+   # samples to be kept after burn in
+   samples = 50000
+   # iterations for burn in
+   burn = samples * 0.1 
+   # number of iterations where samplers adapt behaviour to maximise efficiency
+   nadapt = 100  
+   # The number of MCMC chains to run
+   nchains = 4 
+   # thinning rate
+   # save every thin-th iteration to reduce correlation between 
+   # consecutive values in the chain
+   thin = 10 
+   
+    # Parameters to save
+    parameters = c("NEE","muNEE")
+
+   jags = jags(model.file='Model_Liu.R', data=Data, n.chains=nchains, parameters.to.save = parameters) 
+```
+
+
