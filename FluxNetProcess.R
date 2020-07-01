@@ -100,6 +100,14 @@ FluxNetProcess = function(Site){
   NlagP = 8
   # Total number of climate covariates (see paper for info)
   Ns = 22
+  # Number of blocks for precipitation
+  NblocksP = NlagP
+  # Time blocks i.e. how the Nlag days are grouped together
+  block = c(1:7, rep(8:9, each = 2), rep(10, 3))
+  # The size of the block that each day is included in
+  BlockSize = c(rep(1, 7), rep(2, 4),rep(3, 3))
+  # Number of blocks
+  Nblocks = max(block)
   
   # Calculate other parameters:
   
@@ -166,7 +174,11 @@ FluxNetProcess = function(Site){
                 "ppt_multiscale"=ppt_multiscale,
                 "NEE"=NEE,
                 "NDVI"=NDVI,
-                "NDVI_index"=as.matrix(NDVI_index))
+                "NDVI_index"=NDVI_index,
+                "NblocksP" = NblocksP,
+                "block" = block,
+                "BlockSize" = BlockSize,
+                "Nblocks" = Nblocks)
   name = paste0(Site,"_LiuInput")
   assign(name,output)
   save(list=c(name),file=paste0(name,".Rdata"))

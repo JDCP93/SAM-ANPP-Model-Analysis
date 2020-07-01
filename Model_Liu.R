@@ -31,7 +31,7 @@ model{
   # Likelihood and mean model, looping over daily NEE records at this site (starting at 366 days into the record)
   for(r in 1:Nmem){ # r is the t in the supplemental material model description
     # Likelihood for daily NEE data:
-    NEE[Mem_records[r]] ~ ddexp(mu[r], tau_y)
+    NEE[Mem_records[r]] ~ ddexp(muNEE[r], tau_y)
     # Replicated data for evaluating model fit:
     NEE_pred[r] ~ ddexp(muNEE[r], tau_y)
     # Mean model: summing the effectClim (climate effects multiplied by the associated current 
@@ -115,7 +115,7 @@ model{
   #   iii) bi-monthly scale, starting 2 months previously and up to 5 months previously (i = 5 and 6), 
   #   iv) seasonal scale, starting 6 months previous and over the past year (i = 7 and 8). 
   for(i in 1:NlagP){
-    deltaAP[i] <- (i>1)*deltaXAP[d] + (i==1)*0  
+    deltaAP[i] <- (i>1)*deltaXAP[i] + (i==1)*0  
     weightAP[i] <- deltaAP[i]/sum(deltaAP[])
     # Compute the cumulative weights:
     cum_weightAP[i] <- sum(weightAP[1:i])
