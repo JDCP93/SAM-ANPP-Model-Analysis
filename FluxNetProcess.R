@@ -183,4 +183,6 @@ FluxNetProcess = function(Site){
   assign(name,output)
   save(list=c(name),file=paste0(name,".Rdata"))
   
+  
+  ## THESE NEED TO BE MEAN CENTRED
 }
