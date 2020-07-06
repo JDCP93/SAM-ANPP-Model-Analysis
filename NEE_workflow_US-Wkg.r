@@ -46,7 +46,7 @@ source('NEEModel.R')
 #############  END oF RUN CONFIGURAT #################
 
 # prepare site-level input data from raw data ------
-load('../data/siteinput/US-Wkg_LiuInput.rda') # change these to functions
+load('./data/siteinput/US-Wkg_LiuInput.Rdata') # change these to functions
 attach(`US-Wkg_LiuInput`)
 
 ### # prepare inits ------
@@ -54,29 +54,24 @@ attach(`US-Wkg_LiuInput`)
 ### if(load_inits == T) nee_inits <- Inits_Upd_ag(nee_daily)
 
 # parallelize using dclone ------
-cl <- makeCluster(3, type = "SOCK")
+cl <- makeCluster(4, type = "SOCK")
 parLoadModule(cl, "glm")
+parLoadModule(cl, 'lecuyer')
+parLoadModule(cl, 'dic')
 
 # run model ---------------- # ADD SITE ID HERE!
 parJagsModel(cl, name = 'par_nee_model', file = NEEModel, data = `US-Wkg_LiuInput`,
-             n.chains = 3, n.adapt = 5000, quiet=FALSE)
+             n.chains = 4, n.adapt = 5000, quiet=FALSE)
 parUpdate(cl, "par_nee_model", n.iter=10000)
 
-for(upd_num in 1:2){
-  # adptnum <- 2000
-  # if(upd_num==1){adptnum <- 5000}
-  # nee_daily <- jags.parfit(cl, nee_input_data, nee_monitor_vars, 
-  #                          nee_model_spec, inits = nee_inits, n.chains = 3, 
-  #                          n.adapt = adptnum, n.update = 5000, n.iter = 10000, thin = 10)
+
+samp_iter <- 50000
+
+nee_daily <- parCodaSamples(cl, "par_nee_model", variable.names = nee_monitor_vars, n.iter = samp_iter, thin = 50)
+save(nee_daily, file=paste('/srv/ccrc/data56/z5293113/NEE_project/NEE_output_site_US-Wkg_', Sys.Date(), "_updnum_", upd_num,'.rda', sep = ''))
   
-  samp_iter <- 50000
-  #if(upd_num==1){samp_iter <- 3000}
-  nee_daily <- parCodaSamples(cl, "par_nee_model", variable.names = nee_monitor_vars, n.iter = samp_iter, thin = 50)
-  save(nee_daily, file=paste('/srv/ccrc/data56/z5293113/NEE_project/NEE_output_site_US-Wkg_', Sys.Date(), "_updnum_", upd_num,'.rda', sep = ''))
-  
-  ## new inits -----------------
-  nee_inits <- Inits_Upd_ag(nee_daily)
-  rm(nee_daily)
-}
+
+rm(nee_daily)
 
 detach(`US-Wkg_LiuInput`)
+stopCluster(cl)
