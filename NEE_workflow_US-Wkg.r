@@ -27,8 +27,8 @@ lapply(nee_packs, require, character.only = T)
 # nee_monitor_vars <- c("aa","p_aa", "deltaXA", "weightA", "weightAP", 
 #   "cum_weightA", "cum_weightAP", "sig_yn", "sig_yp", "NEE_pred", "NEE_resi")
 nee_monitor_vars <- c("an", "ag", "phi0", "deltaXA", "weightA", "weightAP", "deltaXAP", 
-                      "cum_weightA", "cum_weightAP", "sig_y", "NEE_pred", "NEE_resi",
-                      "ESen", "ERSen","sdESen", "sdERSen", 'deviance')
+                      "cum_weightA", "cum_weightAP", "sig_y", "NEE_pred",
+                      "ESen", 'deviance')
 
 ### # source the functions and models
 ### source('./dNEE_site/default_utils_list.r') # utils file contains a list of functions to source... And utils.R is using the default model.
