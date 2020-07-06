@@ -26,40 +26,40 @@ lapply(nee_packs, require, character.only = T)
 # variables to monitor
 # nee_monitor_vars <- c("aa","p_aa", "deltaXA", "weightA", "weightAP", 
 #   "cum_weightA", "cum_weightAP", "sig_yn", "sig_yp", "NEE_pred", "NEE_resi")
-nee_monitor_vars <- c("aa", "p_aa", "ag", "p_ag", "phi0", "ag_part", "deltaXA", "weightA", "weightAP", "deltaXAP", 
+nee_monitor_vars <- c("an", "ag", "phi0", "deltaXA", "weightA", "weightAP", "deltaXAP", 
                       "cum_weightA", "cum_weightAP", "sig_y", "NEE_pred", "NEE_resi",
                       "ESen", "ERSen","sdESen", "sdERSen", 'deviance')
 
-# source the functions and models
-source('./dNEE_site/default_utils_list.r') # utils file contains a list of functions to source... And utils.R is using the default model. 
-# Model can be over written if needed:
-# source(alternate model)
+### # source the functions and models
+### source('./dNEE_site/default_utils_list.r') # utils file contains a list of functions to source... And utils.R is using the default model.
+### # Model can be over written if needed:
+source('NEEModel.R')
 
-# OPTIONAL: load inits from previous runs -----
-load_inits <- T
-#load(paste('/scratch/yl422/ah_init_files/ah_NEE_output_site_US-Wkg_2017-02-07_updnum_1.rda'))
-#init_directory <- '../output/20170508/ndvi/'
-init_directory <- '/scratch/yl422/ndvi_0508_inits/'
-outf_names <- list.files(path = init_directory, pattern = '.rda')
-load(paste(init_directory, outf_names[tail(grep('US-Wkg', outf_names), 1)], sep = ''))
+### # OPTIONAL: load inits from previous runs -----
+### load_inits <- T
+### #load(paste('/scratch/yl422/ah_init_files/ah_NEE_output_site_US-Wkg_2017-02-07_updnum_1.rda'))
+### #init_directory <- '../output/20170508/ndvi/'
+### init_directory <- '/scratch/yl422/ndvi_0508_inits/'
+### outf_names <- list.files(path = init_directory, pattern = '.rda')
+### load(paste(init_directory, outf_names[tail(grep('US-Wkg', outf_names), 1)], sep = ''))
 
 #############  END oF RUN CONFIGURAT #################
 
 # prepare site-level input data from raw data ------
-load('../data/siteinput/NEE_input_US-Wkg.rda') # change these to functions
-attach(nee_input_data)
+load('../data/siteinput/US-Wkg_LiuInput.rda') # change these to functions
+attach(`US-Wkg_LiuInput`)
 
-# prepare inits ------
-nee_inits <- Lm_Inits_ag(nee_input_data)
-if(load_inits == T) nee_inits <- Inits_Upd_ag(nee_daily)
+### # prepare inits ------
+### nee_inits <- Lm_Inits_ag(nee_input_data)
+### if(load_inits == T) nee_inits <- Inits_Upd_ag(nee_daily)
 
 # parallelize using dclone ------
 cl <- makeCluster(3, type = "SOCK")
 parLoadModule(cl, "glm")
 
 # run model ---------------- # ADD SITE ID HERE!
-parJagsModel(cl, name = 'par_nee_model', file = nee_model_spec_ndvi, data = nee_input_data,
-             inits = nee_inits, n.chains = 3, n.adapt = 5000, quiet=FALSE)
+parJagsModel(cl, name = 'par_nee_model', file = NEEModel, data = `US-Wkg_LiuInput`,
+             n.chains = 3, n.adapt = 5000, quiet=FALSE)
 parUpdate(cl, "par_nee_model", n.iter=10000)
 
 for(upd_num in 1:2){
@@ -72,11 +72,11 @@ for(upd_num in 1:2){
   samp_iter <- 50000
   #if(upd_num==1){samp_iter <- 3000}
   nee_daily <- parCodaSamples(cl, "par_nee_model", variable.names = nee_monitor_vars, n.iter = samp_iter, thin = 50)
-  save(nee_daily, file=paste('/scratch/yl422/NEE_output_site_US-Wkg_', Sys.Date(), "_updnum_", upd_num,'.rda', sep = ''))
+  save(nee_daily, file=paste('/srv/ccrc/data56/z5293113/NEE_project/NEE_output_site_US-Wkg_', Sys.Date(), "_updnum_", upd_num,'.rda', sep = ''))
   
   ## new inits -----------------
   nee_inits <- Inits_Upd_ag(nee_daily)
   rm(nee_daily)
 }
 
-detach(nee_input_data)
+detach(`US-Wkg_LiuInput`)
