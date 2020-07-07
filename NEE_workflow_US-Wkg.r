@@ -46,7 +46,7 @@ source('NEEModel.R')
 #############  END oF RUN CONFIGURAT #################
 
 # prepare site-level input data from raw data ------
-load('./inputs/US-Wkg_LiuInput.Rdata') # change these to functions
+load('./inputs/US-Wkg_Input.Rdata') # change these to functions
 attach(`US-Wkg_LiuInput`)
 
 ### # prepare inits ------
