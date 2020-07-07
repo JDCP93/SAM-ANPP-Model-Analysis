@@ -126,6 +126,9 @@ FluxNetProcess = function(Site){
                   Data$SWC_F_MDS_1),
                 ncol = Nv)
   
+  # Mean centre the climatic variables
+  clim = scale(clim,scale=FALSE)
+  
   # Create the NEE vector
   NEE = Data$NEE_VUT_REF
   
@@ -158,6 +161,9 @@ FluxNetProcess = function(Site){
   source("PPTProcess.R")
   # Extract the ppt matrix
   ppt_multiscale = PPTProcess(Data)
+  # Mean centre ppt
+  ppt_multiscale = scale(ppt_multiscale,scale=FALSE)
+  # Note this gives precip values of less than 0 which is intriguing.
   
   
   # ############################################################################
@@ -179,7 +185,7 @@ FluxNetProcess = function(Site){
                 "block" = block,
                 "BlockSize" = BlockSize,
                 "Nblocks" = Nblocks)
-  name = paste0(Site,"_LiuInput")
+  name = paste0(Site,"_Input")
   assign(name,output)
   save(list=c(name),file=paste0(name,".Rdata"))
   
