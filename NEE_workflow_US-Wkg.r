@@ -47,7 +47,7 @@ source('NEEModel.R')
 
 # prepare site-level input data from raw data ------
 load('./inputs/US-Wkg_Input.Rdata') # change these to functions
-attach(`US-Wkg_LiuInput`)
+attach(`US-Wkg_Input`)
 
 ### # prepare inits ------
 ### nee_inits <- Lm_Inits_ag(nee_input_data)
@@ -60,7 +60,7 @@ parLoadModule(cl, 'lecuyer')
 parLoadModule(cl, 'dic')
 
 # run model ---------------- # ADD SITE ID HERE!
-parJagsModel(cl, name = 'par_nee_model', file = NEEModel, data = `US-Wkg_LiuInput`,
+parJagsModel(cl, name = 'par_nee_model', file = NEEModel, data = `US-Wkg_Input`,
              n.chains = 4, n.adapt = 5000, quiet=FALSE)
 parUpdate(cl, "par_nee_model", n.iter=10000)
 
@@ -68,10 +68,10 @@ parUpdate(cl, "par_nee_model", n.iter=10000)
 samp_iter <- 50000
 
 nee_daily <- parCodaSamples(cl, "par_nee_model", variable.names = nee_monitor_vars, n.iter = samp_iter, thin = 50)
-save(nee_daily, file=paste('/srv/ccrc/data56/z5293113/NEE_project/NEE_output_site_US-Wkg_', Sys.Date(), "_updnum_", upd_num,'.rda', sep = ''))
+save(nee_daily, file=paste('NEE_output_site_US-Wkg_', Sys.Date(), "_updnum_", upd_num,'.rda', sep = ''))
   
 
 rm(nee_daily)
 
-detach(`US-Wkg_LiuInput`)
+detach(`US-Wkg_Input`)
 stopCluster(cl)
