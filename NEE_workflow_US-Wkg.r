@@ -54,14 +54,14 @@ attach(`US-Wkg_Input`)
 ### if(load_inits == T) nee_inits <- Inits_Upd_ag(nee_daily)
 
 # parallelize using dclone ------
-cl <- makeCluster(4, type = "SOCK")
+cl <- makeCluster(3, type = "SOCK")
 parLoadModule(cl, "glm")
 parLoadModule(cl, 'lecuyer')
 parLoadModule(cl, 'dic')
 
 # run model ---------------- # ADD SITE ID HERE!
 parJagsModel(cl, name = 'par_nee_model', file = NEEModel, data = `US-Wkg_Input`,
-             n.chains = 4, n.adapt = 5000, quiet=FALSE)
+             n.chains = 3, n.adapt = 5000, quiet=FALSE)
 parUpdate(cl, "par_nee_model", n.iter=10000)
 
 

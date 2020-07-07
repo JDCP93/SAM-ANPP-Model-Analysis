@@ -31,7 +31,7 @@ I need to access the full fluxnet data for this, as the data I have from previou
 
 
 ```{r Liu Input Data}
-if (file.exists(paste0(Site,"_LiuInput.Rdata"))){
+if (file.exists(paste0(Site,"_Input.Rdata"))){
   message("Gosh! Processed daily FluxNet data already exists for ",Site)
 } else {
   source("FluxNetProcess.R")
