@@ -77,3 +77,5 @@ rm(nee_daily)
 
 detach(`US-Wkg_Input`)
 stopCluster(cl)
+
+message("Finished the model run at ",Sys.time())
