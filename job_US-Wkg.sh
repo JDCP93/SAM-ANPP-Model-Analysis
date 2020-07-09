@@ -7,10 +7,9 @@
 #SBATCH --workdir=/srv/ccrc/data56/z5293113/NEE_project/# your work directory
 ##############SBATCH --qos=debug       	                # take this line out when you are done testing
 
-# load a module, for example
-module load R/3.3.3
+
 
 # run your application, precede the application command with srun
 srun date
-srun R --vanilla < ./workflow/NEE_workflow_US-Wkg.r > /srv/ccrc/data56/z5293113/NEE_project/NEE_US-Wkg.out
+srun R --vanilla < NEE_workflow_US-Wkg.r > NEE_US-Wkg_results.out
 srun date

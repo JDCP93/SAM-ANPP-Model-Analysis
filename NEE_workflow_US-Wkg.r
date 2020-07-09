@@ -17,7 +17,7 @@
 #              [22] ant_P +  ------ precipitation effect (10 wts)
 
 rm(list = ls())
-
+message("Start the workflow at ",Sys.time())
 ############# CONFIGURE THE RUNS HERE #################
 # load needed packages
 nee_packs <- c('rjags', 'coda', 'stats', 'R2jags', 'dclone')
@@ -60,13 +60,15 @@ parLoadModule(cl, 'lecuyer')
 parLoadModule(cl, 'dic')
 
 # run model ---------------- # ADD SITE ID HERE!
+message("Create the model at ",Sys.time())
 parJagsModel(cl, name = 'par_nee_model', file = NEEModel, data = `US-Wkg_Input`,
              n.chains = 3, n.adapt = 5000, quiet=FALSE)
+message("Update the model at ",Sys.time())
 parUpdate(cl, "par_nee_model", n.iter=10000)
 
 
 samp_iter <- 50000
-
+message("Start the coda sampling at ",Sys.time())
 nee_daily <- parCodaSamples(cl, "par_nee_model", variable.names = nee_monitor_vars, n.iter = samp_iter, thin = 50)
 save(nee_daily, file=paste('NEE_output_site_US-Wkg_', Sys.Date(), "_updnum_", upd_num,'.rda', sep = ''))
   
