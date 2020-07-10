@@ -71,7 +71,7 @@ samp_iter <- 50000
 message("Start the coda sampling at ",Sys.time())
 nee_daily <- parCodaSamples(cl, "par_nee_model", variable.names = nee_monitor_vars, n.iter = samp_iter, thin = 50)
 message("Save model output at ",Sys.time())
-save(nee_daily, file=paste('NEE_output_site_US-Wkg_', Sys.Date(), "_updnum_", upd_num,'.rda', sep = ''))
+save(nee_daily, file=paste('NEE_output_site_US-Wkg_', Sys.Date(),'.rda', sep = ''))
   
 
 rm(nee_daily)
