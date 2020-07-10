@@ -58,7 +58,7 @@ cl <- makeCluster(3, type = "SOCK")
 parLoadModule(cl, "glm")
 parLoadModule(cl, 'lecuyer')
 parLoadModule(cl, 'dic')
-
+message("Begin model run at ",Sys.time())
 # run model ---------------- # ADD SITE ID HERE!
 message("Create the model at ",Sys.time())
 parJagsModel(cl, name = 'par_nee_model', file = NEEModel, data = `US-Wkg_Input`,
@@ -70,6 +70,7 @@ parUpdate(cl, "par_nee_model", n.iter=10000)
 samp_iter <- 50000
 message("Start the coda sampling at ",Sys.time())
 nee_daily <- parCodaSamples(cl, "par_nee_model", variable.names = nee_monitor_vars, n.iter = samp_iter, thin = 50)
+message("Save model output at ",Sys.time())
 save(nee_daily, file=paste('NEE_output_site_US-Wkg_', Sys.Date(), "_updnum_", upd_num,'.rda', sep = ''))
   
 
