@@ -1,8 +1,13 @@
 
 # A junk script to test out various diagnostic tools and explore model output
 # in a haphazard manner
+# 
+# load model inputs
+load('NEE_project/inputs/US-Wkg_Input.Rdata')
 
-
+# 50000 iterations on 6 chains 
+load('NEE_output_site_US-Wkg_2020-07-11.rda')
+# data inside is called "nee_daily"
 
 library(coda)
 
@@ -21,21 +26,22 @@ geweke.plot(nee_daily)
 
 
 
-load("Wkg_v1.Rdata")
-load("./inputs/US-Wkg_LiuInput.Rdata")
+# Summarise for other uses (means, quantiles, etc.)
+nee_daily.summary=summary(nee_daily)
+# Check which variables we tracked
+unique(substr(rownames(nee_daily.summary$statistics),1,8))
 
-jags.mcmc = as.mcmc(jags)
-jags.summary = summary(jags.mcmc)
 
-unique(substr(rownames(jags.summary$statistics),1,3))
+# takes 5EVER OMGOSHHHHHH
+# testing me
+### xyplot(nee_daily)
 
-xyplot(jags.mcmc)
 
-NEE_pred = jags.summary$statistics[substr(rownames(jags.summary$statistics),1,3)=="NEE",1]
-NEE_obs = `US-Wkg_LiuInput`$NEE
+# Check obs vs predicted
+NEE_pred = nee_daily.summary$statistics[substr(rownames(nee_daily.summary$statistics),1,3)=="NEE",1]
+NEE_obs = `US-Wkg_Input`$NEE
 
-plot(NEE_pred)
-plot(`US-Wkg_LiuInput`$NEE)
+plot(NEE_pred,`US-Wkg_Input`$NEE[-(1:365)])
 
 
 
