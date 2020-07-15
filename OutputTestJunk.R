@@ -79,3 +79,41 @@ ggplot(data.frame(cumSWC)) + geom_point(aes(1:length(cumSWC),cumSWC)) + ylim(0,1
 
 cumPPT = results.summary$statistics[substr(rownames(results.summary$statistics),1,12)=="cum_weightAP",1]
 ggplot(data.frame(cumPPT)) + geom_point(aes(c(0,20,29,59,119,179,269,365),cumPPT)) + ylim(0,1)
+
+
+# Calculate R2
+
+summary(lm(NEE_pred ~ NEE_obs))$r.squared
+
+
+# Calculate AR(1) process
+library(R2jags)
+
+# Create data input
+NEE.res = NEE_pred-NEE_obs
+
+Data = data.frame(NEE.res)
+# Define the parameters for the model operation
+# samples to be kept after burn in
+samples = 50000
+# iterations for burn in
+burn = samples * 0.1 
+# number of iterations where samplers adapt behaviour to maximise efficiency
+nadapt = 100  
+# The number of MCMC chains to run
+nchains = 3
+# thinning rate
+# save every thin-th iteration to reduce correlation between 
+# consecutive values in the chain
+thin = 10 
+
+# Parameters to save
+parameters = c("b0","b1","sig.res","NEE.respred")
+
+jags = jags.model('AR1Model.R', data=Data, n.chains=nchains,n.adapt=nadapt) 
+
+# Generate the MCMC chain (this is basically running the Bayesian analysis)
+fit = coda.samples(jags, n.iter=samples, n.burnin=burn, thin=thin,
+                   variable.names=parameters)
+# Assign the summary of the model output to a variable
+Summary = summary(fit)
